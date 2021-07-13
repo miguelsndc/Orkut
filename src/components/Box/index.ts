@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Box = styled.div`
-	background: ${({ theme }) => theme.white};
+	background: ${({ theme }) => theme.backgroundTertiary};
 
 	margin-bottom: 10px;
 	padding: 1rem;
@@ -32,6 +32,10 @@ const Box = styled.div`
 		font-weight: 700;
 		color: ${({ theme }) => theme.gray1};
 		margin-bottom: 1.25rem;
+
+		span {
+			color: ${({ theme }) => theme.primaryText};
+		}
 	}
 
 	hr {
