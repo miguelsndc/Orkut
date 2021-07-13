@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
+import { signOut } from 'next-auth/client';
+
 import * as S from './styles';
 
 import Link from 'next/Link';
-
-import ProfileSidebar from '@components/ProfileSidebar';
 
 const MenuOptions = [
 	{ name: 'Inicio', slug: '/' },
@@ -17,6 +17,10 @@ const VERSION = process.env.NEXT_PUBLIC_VERSION;
 
 export default function Menu({ githubUser }) {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+	function handleSignOut() {
+		signOut({ callbackUrl: 'http://localhost:3000/login' });
+	}
 
 	return (
 		<S.Wrapper isMenuOpen={isMenuOpen}>
@@ -35,7 +39,7 @@ export default function Menu({ githubUser }) {
 				</nav>
 
 				<nav>
-					<a href={`/logout`}>Sair</a>
+					<a onClick={handleSignOut}>Sair</a>
 					<div>
 						<input placeholder='Pesquisar no Orkut' />
 					</div>
