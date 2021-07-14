@@ -2,13 +2,9 @@ import * as S from '@styles/pages/Login';
 
 import Image from 'next/image';
 
-import { signIn } from 'next-auth/client';
-
 export default function Login() {
 	function handleGithubSignIn() {
-		signIn('github', {
-			callbackUrl: 'http://localhost:3000/',
-		});
+		console.log('log');
 	}
 
 	return (
