@@ -12,7 +12,13 @@ export default function Profile({ name, imageURL }: ProfileProps) {
 	return (
 		<Link href={`/users/${name}`}>
 			<S.Wrapper>
-				<Image src={imageURL} layout='fill' objectFit='cover' />
+				<Image
+					src={imageURL}
+					layout='fill'
+					objectFit='cover'
+					placeholder='blur'
+					blurDataURL={imageURL}
+				/>
 				<span>{name}</span>
 				<div className='overlay' />
 			</S.Wrapper>
