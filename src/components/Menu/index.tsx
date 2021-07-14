@@ -1,15 +1,13 @@
 import { useState } from 'react';
 
-import { signOut } from 'next-auth/client';
-
 import * as S from './styles';
 
 import Link from 'next/Link';
 
 const MenuOptions = [
 	{ name: 'Inicio', slug: '/' },
-	{ name: 'Amigos', slug: '/amigos' },
-	{ name: 'Comunidades', slug: '/comunidades' },
+	{ name: 'Amigos', slug: '/friends/all' },
+	{ name: 'Comunidades', slug: '/communities/all' },
 ];
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -17,10 +15,6 @@ const VERSION = process.env.NEXT_PUBLIC_VERSION;
 
 export default function Menu({ githubUser }) {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-	function handleSignOut() {
-		signOut({ callbackUrl: 'http://localhost:3000/login' });
-	}
 
 	return (
 		<S.Wrapper isMenuOpen={isMenuOpen}>
@@ -39,7 +33,7 @@ export default function Menu({ githubUser }) {
 				</nav>
 
 				<nav>
-					<a onClick={handleSignOut}>Sair</a>
+					<Link href='/login'>Sair</Link>
 					<div>
 						<input placeholder='Pesquisar no Orkut' />
 					</div>
