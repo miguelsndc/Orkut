@@ -52,7 +52,6 @@ export default function NostalgicIconSet(props) {
 							className='NostalgicIconSet__iconComplex NostalgicIconSet__number'
 							style={{ gridArea: 'number' }}
 						>
-							////
 							{indexes.map((_, index) => {
 								const isHeartActive = index <= total - 1;
 
