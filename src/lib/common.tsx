@@ -47,5 +47,4 @@ export const AlurakutStyles = css`
 			box-shadow: 0px 0px 5px #33333357;
 		}
 	}
-	${AlurakutLoginScreen}
 `;
