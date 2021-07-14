@@ -1,9 +1,8 @@
 import Box from '@components/Box';
-import { DefaultSession } from 'next-auth';
 import Image from 'next/image';
 
 type ProfileSidebarProps = {
-	user: DefaultSession['user'];
+	user: string;
 };
 
 import * as S from './styles';
@@ -47,22 +46,29 @@ function ProfileSidebarMenuDefault() {
 }
 
 export default function ProfileSidebar({ user }: ProfileSidebarProps) {
+	const loader = ({ src }) => {
+		return `https://github.com/${src}`;
+	};
+
 	return (
 		<Box>
 			<div>
 				<div>
 					<Image
-						src={`${user.image}`}
-						alt={`${user.name}`}
+						loader={loader}
+						src={`${user}.png`}
+						alt={`${user}`}
 						width={320}
 						height={320}
+						placeholder='blur'
+						blurDataURL={`https://github.com/${user}.png`}
 					/>
 
 					<hr />
 
 					<p>
-						<a className='boxLink' href={`/user/${user.name}`}>
-							@{user.name}
+						<a className='boxLink' href={`/user/${user}`}>
+							@{user}
 						</a>
 					</p>
 
