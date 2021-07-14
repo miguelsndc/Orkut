@@ -6,13 +6,20 @@ export const Wrapper = styled.li`
 	height: 102px;
 
 	span {
+		display: inline-block;
+		max-width: 90%;
+
 		position: absolute;
 		padding: 0.35rem;
 		bottom: 7px;
 		color: #fff;
 		font-weight: 500;
-		font-size: 0.875rem;
+		font-size: 0.725rem;
 		z-index: 9;
+
+		text-overflow: ellipsis;
+		white-space: pre-wrap;
+		word-wrap: break-word;
 	}
 
 	img {
