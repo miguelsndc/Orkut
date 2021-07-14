@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import Link from 'next/Link';
 
 type ProfileProps = {
 	name: string;
@@ -10,7 +10,7 @@ import * as S from './styles';
 
 export default function Profile({ name, imageURL }: ProfileProps) {
 	return (
-		<Link href={`/users/${name}`}>
+		<Link href={`/friends/${name}`}>
 			<S.Wrapper>
 				<Image
 					src={imageURL}
