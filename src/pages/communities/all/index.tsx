@@ -7,6 +7,7 @@ import Box from '@components/Box';
 import * as S from '@styles/pages/FriendList';
 import Image from 'next/image';
 import Link from 'next/Link';
+import CreateCommunityForm from '@components/CreateCommunityForm';
 
 type Community = {
 	__typename: string;
@@ -28,10 +29,15 @@ export default function AllCommunities({ communities }: AllCommunitiesProps) {
 				<ProfileSidebar user={'miguelsndc'} />
 			</div>
 			<Box>
-				<h2 className='title'>Todas as Comunidades</h2>
+				<h2 className='title'>Comunidades</h2>
 				<div className='path'>
-					<Link href='/'>Início </Link> {'>'} Todas as Comunidades
+					<Link href='/'>Início </Link> {'>'} Comunidades
 				</div>
+				<hr />
+				<h4 className='subTitle'>Criar nova Comunidade</h4>
+				<CreateCommunityForm />
+				<hr />
+				<h4 className='subTitle'>Comunidades Existentes</h4>
 				<S.Table>
 					<tbody>
 						{communities.map(community => {

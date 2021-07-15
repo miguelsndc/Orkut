@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import CreateCommunityForm from '@components/CreateCommunityForm';
 import NostalgicIconSet from '@components/NostalgicIconSet';
 import ProfileRelations from '@components/ProfileRelations';
 import ProfileSidebar from '@components/ProfileSidebar';
@@ -48,7 +47,6 @@ export default function Home() {
 				</Box>
 				<Box>
 					<h2 className='subTitle'>O que você deseja fazer ?</h2>
-					<CreateCommunityForm />
 				</Box>
 			</S.GridItem>
 			<S.GridItem
