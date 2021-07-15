@@ -1,4 +1,4 @@
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next';
 import { GithubUser } from 'src/types/GithubUser';
 import api from 'src/services/api';
 import ProfileSidebar from '@components/ProfileSidebar';
@@ -15,14 +15,22 @@ export default function FriendDetails({ login }: FriendDetailsProps) {
 	);
 }
 
-export const getServerSideProps: GetServerSideProps = async ({
+export const getStaticPaths: GetStaticPaths = async () => {
+	return {
+		paths: [],
+		fallback: true,
+	};
+};
+
+export const getStaticProps: GetStaticProps = async ({
 	params,
-}: GetServerSidePropsContext) => {
+}: GetStaticPropsContext) => {
 	const { name } = params;
 
 	const { data } = await api.get<GithubUser>(`/users/${name}`);
 
 	return {
 		props: data,
+		revalidate: 60 * 60 * 12,
 	};
 };
