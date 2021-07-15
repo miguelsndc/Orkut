@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useForm } from 'react-hook-form';
 
 type FormData = {
@@ -5,29 +6,27 @@ type FormData = {
 	image: string;
 };
 
-type createCommunityProps = {
-	image: string;
-	title: string;
-};
-
-type CreateCommunityFormProps = {
-	onCreate: ({ image, title }: createCommunityProps) => void;
-};
-
-export default function CreateCommunityForm({
-	onCreate,
-}: CreateCommunityFormProps) {
+export default function CreateCommunityForm() {
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm<FormData>();
 
-	function handleCreateCommunity(data: FormData) {
-		onCreate({
-			image: data.image,
-			title: data.name,
-		});
+	async function handleCreateCommunity(data: FormData) {
+		await axios.post(
+			'/api/communities/',
+			{
+				title: data.name,
+				imageUrl: data.image,
+				creatorSlug: 'miguelsndc',
+			},
+			{
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			}
+		);
 	}
 
 	return (
