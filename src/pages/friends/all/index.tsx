@@ -5,6 +5,7 @@ import { Follower } from 'src/types/Follower';
 import api from 'src/services/api';
 import Image from 'next/image';
 import * as S from '@styles/pages/FriendList';
+import Link from 'next/Link';
 
 type AllFriendsProps = {
 	data: Follower[];
@@ -34,7 +35,9 @@ export default function FriendList({ data }: AllFriendsProps) {
 										blurDataURL={follower.avatar_url}
 									/>
 									<div>
-										<h3>{follower.login}</h3>
+										<Link href={`/friends/${follower.login}`}>
+											<h3>{follower.login}</h3>
+										</Link>
 										<span>{follower.url}</span>
 									</div>
 								</tr>
