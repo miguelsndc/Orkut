@@ -1,0 +1,8 @@
+query GetAllCommunities {
+	allCommunities {
+		title
+		imageUrl
+		id
+		creatorSlug
+	}
+}
