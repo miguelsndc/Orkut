@@ -8,16 +8,34 @@ import Box from '@components/Box';
 
 import { Follower } from 'src/types/Follower';
 import QUERY_ALL_COMMUNITIES from 'src/graphql/queryAllCommunities.graphql';
+import QUERY_ALL_POSTS from 'src/graphql/queryAllPosts.graphql';
 
 import * as S from '@styles/pages/Home';
 import api from 'src/services/api';
 import { useQuery } from '@apollo/client';
+import CreatePostForm from '@components/CreatePostForm';
+import Post from '@components/Post';
+
+type PostType = {
+	title: string;
+	content: string;
+	authorPicture: string;
+};
+
+type QueryPosts = {
+	allPosts: PostType[];
+};
 
 export default function Home() {
 	const githubUser = 'miguelsndc';
 
-	const { data, loading, error, refetch } = useQuery(QUERY_ALL_COMMUNITIES);
+	const communities = useQuery(QUERY_ALL_COMMUNITIES);
+	const posts = useQuery<QueryPosts>(QUERY_ALL_POSTS);
+
 	const [followers, setFollowers] = useState<Follower[]>([]);
+	const [mostRecentPost, setMostRecentPost] = useState<PostType>(
+		{} as PostType
+	);
 
 	useEffect(() => {
 		api.get<Follower[]>(`/users/${githubUser}/followers`).then(response => {
@@ -26,15 +44,7 @@ export default function Home() {
 		});
 	}, []);
 
-	if (loading) {
-		return <h1>Loading...</h1>;
-	}
-
-	if (error) {
-		return <p>{JSON.stringify(error)}</p>;
-	}
-
-	console.log(data);
+	console.log(communities);
 
 	return (
 		<MainGrid>
@@ -46,8 +56,13 @@ export default function Home() {
 					<h1 className='title'>Bem vindo</h1> <NostalgicIconSet />
 				</Box>
 				<Box>
-					<h2 className='subTitle'>O que você deseja fazer ?</h2>
+					<h2 className='subTitle'>Inicie uma Discussão!</h2>
+					<CreatePostForm />
 				</Box>
+				{!posts.loading &&
+					posts.data.allPosts.map(post => {
+						return <Post post={post} />;
+					})}
 			</S.GridItem>
 			<S.GridItem
 				className='profileRelationsArea'
@@ -71,18 +86,22 @@ export default function Home() {
 				</Box>
 				<Box>
 					<h2 className='smallTitle'>
-						Comunidades <span>({data.allCommunities.length})</span>
+						Comunidades{' '}
+						<span>
+							({!communities.loading && communities.data.allCommunities.length})
+						</span>
 					</h2>
 					<S.ProfileRelationsWrapper>
-						{data.allCommunities.slice(0, 6).map(community => {
-							return (
-								<ProfileRelations
-									key={community.id}
-									name={community.title}
-									imageURL={community.imageUrl}
-								/>
-							);
-						})}
+						{!communities.loading &&
+							communities.data.allCommunities.slice(0, 6).map(community => {
+								return (
+									<ProfileRelations
+										key={community.id}
+										name={community.title}
+										imageURL={community.imageUrl}
+									/>
+								);
+							})}
 					</S.ProfileRelationsWrapper>
 				</Box>
 			</S.GridItem>
