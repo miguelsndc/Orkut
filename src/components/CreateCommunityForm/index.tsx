@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 
+import * as S from './styles';
+
 type FormData = {
 	name: string;
 	image: string;
@@ -30,7 +32,7 @@ export default function CreateCommunityForm() {
 	}
 
 	return (
-		<form onSubmit={handleSubmit(handleCreateCommunity)}>
+		<S.Form onSubmit={handleSubmit(handleCreateCommunity)}>
 			<div>
 				<input
 					type='text'
@@ -48,6 +50,6 @@ export default function CreateCommunityForm() {
 				/>
 			</div>
 			<button type='submit'>Criar comunidade</button>
-		</form>
+		</S.Form>
 	);
 }
