@@ -7,18 +7,18 @@ import ProfileSidebar from '@components/ProfileSidebar';
 import MainGrid from '@components/MainGrid';
 import Box from '@components/Box';
 
-import useCommunity from 'src/hooks/useCommunity';
 import { Follower } from 'src/types/Follower';
+import QUERY_ALL_COMMUNITIES from 'src/graphql/queryAllCommunities.graphql';
+
 import * as S from '@styles/pages/Home';
 import api from 'src/services/api';
+import { useQuery } from '@apollo/client';
 
 export default function Home() {
 	const githubUser = 'miguelsndc';
 
-	const { communities, createCommunity } = useCommunity();
+	const { data, loading, error, refetch } = useQuery(QUERY_ALL_COMMUNITIES);
 	const [followers, setFollowers] = useState<Follower[]>([]);
-
-	console.log(communities);
 
 	useEffect(() => {
 		api.get<Follower[]>(`/users/${githubUser}/followers`).then(response => {
@@ -26,6 +26,16 @@ export default function Home() {
 			setFollowers(data);
 		});
 	}, []);
+
+	if (loading) {
+		return <h1>Loading...</h1>;
+	}
+
+	if (error) {
+		return <p>{JSON.stringify(error)}</p>;
+	}
+
+	console.log(data);
 
 	return (
 		<MainGrid>
@@ -38,7 +48,7 @@ export default function Home() {
 				</Box>
 				<Box>
 					<h2 className='subTitle'>O que você deseja fazer ?</h2>
-					<CreateCommunityForm onCreate={createCommunity} />
+					<CreateCommunityForm />
 				</Box>
 			</S.GridItem>
 			<S.GridItem
@@ -63,14 +73,14 @@ export default function Home() {
 				</Box>
 				<Box>
 					<h2 className='smallTitle'>
-						Comunidades <span>({communities.length})</span>
+						Comunidades <span>({data.allCommunities.length})</span>
 					</h2>
 					<S.ProfileRelationsWrapper>
-						{communities.slice(0, 6).map(community => {
+						{data.allCommunities.slice(0, 6).map(community => {
 							return (
 								<ProfileRelations
 									key={community.id}
-									name={community.name}
+									name={community.title}
 									imageURL={community.imageUrl}
 								/>
 							);
