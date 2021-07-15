@@ -52,6 +52,11 @@ export const Table = styled.table`
 			color: ${({ theme }) => theme.primaryText};
 			font-weight: 500;
 			line-height: 1.4;
+			cursor: pointer;
+
+			&:hover {
+				text-decoration: underline;
+			}
 		}
 
 		span {
