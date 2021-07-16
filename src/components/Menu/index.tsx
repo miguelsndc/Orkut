@@ -2,7 +2,8 @@ import { useState } from 'react';
 
 import * as S from './styles';
 
-import Link from 'next/Link';
+import Link from 'next/link';
+import { IoSearchOutline } from 'react-icons/io5';
 
 const MenuOptions = [
 	{ name: 'Inicio', slug: '/' },
@@ -21,7 +22,7 @@ export default function Menu({ githubUser }) {
 			<div className='container'>
 				<S.Logo src={`${BASE_URL}/logo.svg`} />
 
-				<nav style={{ flex: 1 }}>
+				<nav className='nav-links' style={{ flex: 1 }}>
 					{MenuOptions.map(menuItem => (
 						<Link
 							key={`key__${menuItem.name.toLocaleLowerCase()}`}
@@ -31,14 +32,15 @@ export default function Menu({ githubUser }) {
 						</Link>
 					))}
 				</nav>
-
 				<nav>
-					<Link href='/login'>Sair</Link>
-					<div>
-						<input placeholder='Pesquisar no Orkut' />
+					<div className='search'>
+						<IoSearchOutline />
+						<input
+							placeholder='Pesquisar no Orkut'
+							aria-label='Pesquisar no Orkut'
+						/>
 					</div>
 				</nav>
-
 				<button onClick={() => setIsMenuOpen(!isMenuOpen)}>
 					{isMenuOpen && (
 						<img src={`${BASE_URL}/icons/menu-open.svg?v=${VERSION}`} />

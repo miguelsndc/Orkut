@@ -8,7 +8,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const Wrapper = styled.header<MenuProfileSidebarProps>`
 	width: 100%;
-	background-color: #308bc5;
+	background-color: #fff;
 
 	.alurakutMenuProfileSidebar {
 		background: white;
@@ -45,7 +45,7 @@ export const Wrapper = styled.header<MenuProfileSidebarProps>`
 		.boxLink {
 			font-size: 1.125rem;
 			font-weight: 800;
-			color: #2e7bb4;
+			color: ${({ theme }) => theme.gray1};
 			-webkit-text-decoration: none;
 			text-decoration: none;
 		}
@@ -63,7 +63,7 @@ export const Wrapper = styled.header<MenuProfileSidebarProps>`
 		display: flex;
 		justify-content: space-between;
 
-		background-color: #308bc5;
+		background-color: #fff;
 		max-width: 1110px;
 
 		margin: auto;
@@ -88,7 +88,7 @@ export const Wrapper = styled.header<MenuProfileSidebarProps>`
 			}
 		}
 
-		nav {
+		.nav-links {
 			display: none;
 
 			@media (min-width: 860px) {
@@ -96,50 +96,50 @@ export const Wrapper = styled.header<MenuProfileSidebarProps>`
 			}
 
 			a {
-				font-size: 0.75rem;
+				font-size: 0.95rem;
 				text-decoration: none;
-				color: white;
-
-				position: relative;
+				color: ${({ theme }) => theme.gray1};
+				font-weight: 500;
+				font: inherit;
 
 				padding: 0.625rem 1rem;
+				transition: color 0.2s;
 
-				&:after {
-					content: ' ';
-					display: block;
-
-					background-color: #5292c1;
-
-					width: 1px;
-					height: 0.75rem;
-
-					margin: auto;
-
-					position: absolute;
-					left: 0;
-					top: 0;
-					bottom: 0;
+				&:hover {
+					color: ${({ theme }) => theme.primaryElement};
 				}
 			}
 		}
 
-		input {
+		.search {
+			background: ${({ theme }) => theme.backgroundDefault};
+			padding: 0.625rem 1.25rem;
+			border-radius: 8px;
+
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+			justify-content: space-evenly;
+
+			&:focus-within {
+				outline: auto;
+			}
+		}
+
+		.search input {
+			background: ${({ theme }) => theme.backgroundDefault};
+
 			font-size: 0.75rem;
-			color: #ffffff;
 
-			background: #5579a1;
+			outline: 0;
 
-			padding: 0.625rem 2.625rem;
-
-			background-image: url(${`${BASE_URL}/icons/search.svg`});
-			background-position: 15px center;
-			background-repeat: no-repeat;
+			color: ${({ theme }) => theme.gray1};
 
 			border: 0;
-			border-radius: 1000px;
+			font: inherit;
 
 			::placeholder {
-				color: #ffffff;
+				color: ${({ theme }) => theme.gray4};
 				opacity: 1;
 			}
 		}
