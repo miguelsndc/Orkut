@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import * as S from './styles';
-
+import Image from 'next/image';
 import toast from 'react-hot-toast';
+import TextareaAutosize from 'react-textarea-autosize';
 
 type FormData = {
-	title: string;
 	content: string;
 };
 
@@ -19,7 +19,7 @@ export default function CreatePostForm() {
 	async function handleCreatePost(data: FormData) {
 		try {
 			await axios.post('/api/posts', {
-				title: data.title,
+				title: 'a',
 				author: 'miguelsndc',
 				content: data.content,
 			});
@@ -32,20 +32,18 @@ export default function CreatePostForm() {
 
 	return (
 		<S.Form onSubmit={handleSubmit(handleCreatePost)}>
-			<input
-				type='text'
-				placeholder='Título da Discussão'
-				{...register('title', { required: true, maxLength: 50 })}
-			/>
-
-			{errors.title?.type === 'required' && (
-				<S.Error>O Título é Obrigatório</S.Error>
-			)}
-			{errors.title?.type === 'maxLength' && (
-				<S.Error>O título deve ter no máximo 50 Caracteres</S.Error>
-			)}
-
-			<textarea {...register('content', { required: true, maxLength: 500 })} />
+			<div className='profile-review'>
+				<Image
+					src='https://github.com/miguelsndc.png'
+					width={192}
+					height={192}
+				/>
+				<TextareaAutosize
+					className='text'
+					placeholder='O que você está pensando ?'
+					{...register('content', { required: true, maxLength: 500 })}
+				/>
+			</div>
 
 			{errors.content?.type === 'required' && (
 				<S.Error>A Discussão é Obrigatória</S.Error>
@@ -54,7 +52,9 @@ export default function CreatePostForm() {
 				<S.Error>A discussão deve ter no máximo 500 Caracteres</S.Error>
 			)}
 
-			<button type='submit'>Iniciar Discussão</button>
+			<hr />
+
+			<button type='submit'>Postar</button>
 		</S.Form>
 	);
 }
