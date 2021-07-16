@@ -7,6 +7,15 @@ type ProfileSidebarProps = {
 
 import * as S from './styles';
 
+import {
+	IoPersonOutline,
+	IoBookOutline,
+	IoCameraOutline,
+	IoTrendingUpOutline,
+	IoLogOutOutline,
+	IoChatbubbleEllipsesOutline,
+} from 'react-icons/io5';
+
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 function ProfileSidebarMenuDefault() {
@@ -14,30 +23,30 @@ function ProfileSidebarMenuDefault() {
 		<S.Wrapper>
 			<nav>
 				<a href='/'>
-					<img src={`${BASE_URL}/icons/user.svg`} />
+					<IoPersonOutline />
 					Perfil
 				</a>
 				<a href='/'>
-					<img src={`${BASE_URL}/icons/book.svg`} />
+					<IoBookOutline />
 					Recados
 				</a>
 				<a href='/'>
-					<img src={`${BASE_URL}/icons/camera.svg`} />
+					<IoCameraOutline />
 					Fotos
 				</a>
 				<a href='/'>
-					<img src={`${BASE_URL}/icons/sun.svg`} />
+					<IoChatbubbleEllipsesOutline />
 					Depoimentos
 				</a>
 			</nav>
 			<hr />
 			<nav>
 				<a href='/'>
-					<img src={`${BASE_URL}/icons/plus.svg`} />
+					<IoTrendingUpOutline />
 					GitHub Trends
 				</a>
 				<a href='/logout'>
-					<img src={`${BASE_URL}//icons/logout.svg`} />
+					<IoLogOutOutline />
 					Sair
 				</a>
 			</nav>
@@ -55,22 +64,21 @@ export default function ProfileSidebar({ user }: ProfileSidebarProps) {
 			<div>
 				<div>
 					<Image
+						className='profile-picture'
 						loader={loader}
 						src={`${user}.png`}
 						alt={`${user}`}
-						width={320}
-						height={320}
+						width={360}
+						height={360}
 						placeholder='blur'
 						blurDataURL={`https://github.com/${user}.png`}
 					/>
 
 					<hr />
 
-					<p>
-						<a className='boxLink' href={`/user/${user}`}>
-							@{user}
-						</a>
-					</p>
+					<h2 className='profile-name'>
+						<a href={`/user/${user}`}>@{user}</a>
+					</h2>
 
 					<hr />
 

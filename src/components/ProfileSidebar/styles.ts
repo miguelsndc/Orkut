@@ -6,16 +6,26 @@ export const Wrapper = styled.div`
 		align-items: center;
 		justify-content: flex-start;
 
-		font-size: 0.875rem;
+		font-size: 0.9rem;
 		text-decoration: none;
-		color: #2e7bb4;
+		color: ${({ theme }) => theme.gray1};
 
 		margin-bottom: 1rem;
 
-		img {
-			width: 1rem;
-			height: 1rem;
-			margin-right: 5px;
+		&:hover {
+			&,
+			svg {
+				color: ${({ theme }) => theme.primaryElement};
+			}
 		}
+	}
+
+	&,
+	svg {
+		transition: all 0.2s;
+	}
+
+	svg {
+		margin-right: 4px;
 	}
 `;
