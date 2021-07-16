@@ -1,0 +1,28 @@
+import styled from 'styled-components';
+
+export const Wrapper = styled.li`
+	display: flex;
+	align-items: center;
+	position: relative;
+
+	border-radius: 8px;
+	margin: 0.8rem 0;
+	cursor: pointer;
+
+	span {
+		padding: 0.35rem;
+
+		color: ${({ theme }) => theme.gray1};
+		font-weight: 600;
+
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	img {
+		width: 54px;
+		height: 54px;
+		border-radius: 10px;
+	}
+`;
