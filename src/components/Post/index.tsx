@@ -2,20 +2,29 @@ import Box from '@components/Box';
 import Image from 'next/image';
 import { Container } from './styles';
 
+import { parseISO, format } from 'date-fns';
+import PTBR from 'date-fns/locale/pt-BR';
+
 type Post = {
-	title: string;
+	id: string;
 	content: string;
-	authorPicture: string;
+	author: string;
+	createdAt: string;
 };
 
 type PostProps = {
 	post: Post;
 };
 export default function Post({ post }: PostProps) {
+	const createdAt = parseISO(post.createdAt);
+	const formattedDate = format(createdAt, "dd 'de' MMMM', às ' HH:mm'h'", {
+		locale: PTBR,
+	});
+
 	return (
 		<Container>
 			<Box>
-				<div className='profile'>
+				<div className='author'>
 					<Image
 						src='https://github.com/miguelsndc.png'
 						placeholder='blur'
@@ -23,10 +32,12 @@ export default function Post({ post }: PostProps) {
 						width={128}
 						height={128}
 					/>
-					<h4>{post.authorPicture}</h4>
+					<div>
+						<h4>{post.author}</h4>
+						<span>{formattedDate}</span>
+					</div>
 				</div>
 				<hr />
-				<h2>{post.title}</h2>
 				<p>{post.content}</p>
 			</Box>
 		</Container>
