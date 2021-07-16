@@ -8,10 +8,12 @@ const Box = styled.div`
 
 	border-radius: 8px;
 
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+
 	.boxLink {
 		font-size: 0.875rem;
 		font-weight: 800;
-		color: ${({ theme }) => theme.primaryText};
+		color: ${({ theme }) => theme.gray1};
 		text-decoration: none;
 	}
 
@@ -34,15 +36,24 @@ const Box = styled.div`
 		margin-bottom: 1.25rem;
 
 		span {
-			color: ${({ theme }) => theme.primaryText};
+			color: ${({ theme }) => theme.primaryElement};
 		}
 	}
+	.profile-picture {
+		border-radius: 8px;
+	}
 
+	.profile-name a {
+		color: ${({ theme }) => theme.primaryElement};
+
+		font-size: 1.2rem;
+		text-decoration: none;
+	}
 	hr {
 		margin-top: 0.75rem;
 		margin-bottom: 0.5rem;
 		border-color: transparent;
-		border-bottom-color: #ecf2fa;
+		border-bottom-color: ${({ theme }) => theme.gray5};
 	}
 
 	input {
@@ -55,7 +66,9 @@ const Box = styled.div`
 		margin-bottom: 0.875rem;
 
 		border: 0;
-		border-radius: 10000px;
+		border-radius: 8px;
+
+		font: inherit;
 
 		&::placeholder {
 			color: ${({ theme }) => theme.gray1};
@@ -65,12 +78,21 @@ const Box = styled.div`
 
 	button {
 		background-color: ${({ theme }) => theme.primaryElement};
-		color: ${({ theme }) => theme.gray5};
+		color: ${({ theme }) => theme.backgroundDefault};
 
 		padding: 0.5rem 0.75rem;
 
 		border: 0;
 		border-radius: 10000px;
+
+		font: inherit;
+		cursor: pointer;
+
+		transition: filter 0.2s;
+
+		&:hover {
+			filter: brightness(0.9);
+		}
 	}
 `;
 

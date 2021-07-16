@@ -25,7 +25,7 @@ export const Container = styled.main`
 
 	.path {
 		a {
-			color: ${({ theme }) => theme.primaryText};
+			color: ${({ theme }) => theme.primaryElement};
 			text-decoration: none;
 			font-size: 1.125rem;
 
@@ -46,10 +46,10 @@ export const Table = styled.table`
 		align-items: center;
 		gap: 1rem;
 		padding: 1rem;
-		background: ${({ theme }) => theme.backgroundSecondary};
+		background: ${({ theme }) => theme.gray5};
 
 		h3 {
-			color: ${({ theme }) => theme.primaryText};
+			color: ${({ theme }) => theme.primaryElement};
 			font-weight: 500;
 			line-height: 1.4;
 			cursor: pointer;
