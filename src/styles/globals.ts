@@ -12,12 +12,14 @@ export const GlobalStyles = createGlobalStyle`
 	body {
 		background: ${({ theme }) => theme.backgroundDefault};
 
-		font-family: 'Rubik',
+		font-family: 'Inter',
 			-apple-system, BlinkMacSystemFont,
 			'Segoe UI', Roboto,
 			Oxygen, Ubuntu, Cantarell,
 			'Open Sans', 'Helvetica Neue',
 			sans-serif;
+
+
 	}
 
 	#__next {
