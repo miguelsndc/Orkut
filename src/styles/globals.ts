@@ -9,6 +9,12 @@ export const GlobalStyles = createGlobalStyle`
 		box-sizing: border-box;
 	}
 
+	p, textarea,input,h1,h2,h3,h4,h5,h6,span,a {
+		::selection {
+					background: ${({ theme }) => theme.primaryElement};
+					color: #fff;
+				}
+	}
 	body {
 		background: ${({ theme }) => theme.backgroundDefault};
 
