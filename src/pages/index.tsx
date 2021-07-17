@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import NostalgicIconSet from '@components/NostalgicIconSet';
-import ProfileRelations from '@components/ProfileRelations';
+import CommunitySmall from '@components/CommunitySmall';
 import ProfileSidebar from '@components/ProfileSidebar';
 import MainGrid from '@components/MainGrid';
 import Box from '@components/Box';
+
+import Link from 'next/link';
 
 import { Follower } from 'src/types/Follower';
 import QUERY_ALL_COMMUNITIES from 'src/graphql/queryAllCommunities.graphql';
@@ -15,6 +16,8 @@ import api from 'src/services/api';
 import { useQuery } from '@apollo/client';
 import CreatePostForm from '@components/CreatePostForm';
 import Post from '@components/Post';
+import FriendSmall from '@components/FriendSmall';
+import Spinner from '@components/Spinner';
 
 type PostType = {
 	id: string;
@@ -45,8 +48,6 @@ export default function Home() {
 		});
 	}, []);
 
-	console.log(communities);
-
 	return (
 		<MainGrid>
 			<S.GridItem className='profileArea' gridArea='profileArea'>
@@ -54,16 +55,14 @@ export default function Home() {
 			</S.GridItem>
 			<S.GridItem className='welcomeArea' gridArea='welcomeArea'>
 				<Box>
-					<h1 className='title'>Bem vindo</h1> <NostalgicIconSet />
-				</Box>
-				<Box>
-					<h2 className='subTitle'>Inicie uma Discussão!</h2>
 					<CreatePostForm />
 				</Box>
-				{!posts.loading &&
-					posts.data.allPosts.map(post => {
-						return <Post post={post} />;
-					})}
+
+				{posts.loading ? (
+					<Spinner />
+				) : (
+					posts.data.allPosts.map(post => <Post post={post} key={post.id} />)
+				)}
 			</S.GridItem>
 			<S.GridItem
 				className='profileRelationsArea'
@@ -74,15 +73,15 @@ export default function Home() {
 						Meus Amigos <span>({followers.length})</span>
 					</h2>
 					<S.ProfileRelationsWrapper>
-						{followers.slice(0, 6).map(follower => {
-							return (
-								<ProfileRelations
-									key={follower.id}
-									name={follower.login}
-									imageURL={follower.avatar_url}
-								/>
-							);
-						})}
+						{followers.slice(0, 6).map(follower => (
+							<FriendSmall
+								key={follower.id}
+								name={follower.login}
+								imageURL={follower.avatar_url}
+							/>
+						))}
+						<hr />
+						<Link href='/friends/all'>Ver Todos</Link>
 					</S.ProfileRelationsWrapper>
 				</Box>
 				<Box>
@@ -93,16 +92,21 @@ export default function Home() {
 						</span>
 					</h2>
 					<S.ProfileRelationsWrapper>
-						{!communities.loading &&
-							communities.data.allCommunities.slice(0, 6).map(community => {
-								return (
-									<ProfileRelations
+						{communities.loading ? (
+							<Spinner />
+						) : (
+							communities.data.allCommunities
+								.slice(0, 6)
+								.map(community => (
+									<CommunitySmall
 										key={community.id}
 										name={community.title}
 										imageURL={community.imageUrl}
 									/>
-								);
-							})}
+								))
+						)}
+						<hr />
+						<Link href='/communities/all'>Ver Todas</Link>
 					</S.ProfileRelationsWrapper>
 				</Box>
 			</S.GridItem>
