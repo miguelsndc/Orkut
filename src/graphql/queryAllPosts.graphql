@@ -1,7 +1,8 @@
 query {
 	allPosts {
-		title
+		id
+		createdAt
 		content
-		authorPicture
+		author
 	}
 }
