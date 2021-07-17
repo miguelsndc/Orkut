@@ -1,36 +1,27 @@
-import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next';
 import { GithubUser } from 'src/types/GithubUser';
 import api from 'src/services/api';
 import ProfileSidebar from '@components/ProfileSidebar';
 import { Container } from '@styles/pages/FriendList';
+import { useRouter } from 'next/dist/client/router';
+import { useEffect, useState } from 'react';
+import Spinner from '@components/Spinner';
 
-type FriendDetailsProps = GithubUser;
+export default function FriendDetails() {
+	const [user, setUser] = useState<GithubUser>();
+	const router = useRouter();
 
-export default function FriendDetails({ login }: FriendDetailsProps) {
+	const { name } = router.query;
+
+	useEffect(() => {
+		api.get<GithubUser>(`/users/${name}`).then(({ data }) => {
+			setUser(data);
+		});
+	}, []);
+
 	return (
 		<Container>
-			<ProfileSidebar user={login} />
+			{user ? <ProfileSidebar user={user.login} /> : <Spinner />}
 			<div></div>
 		</Container>
 	);
 }
-
-export const getStaticPaths: GetStaticPaths = async () => {
-	return {
-		paths: [],
-		fallback: true,
-	};
-};
-
-export const getStaticProps: GetStaticProps = async ({
-	params,
-}: GetStaticPropsContext) => {
-	const { name } = params;
-
-	const { data } = await api.get<GithubUser>(`/users/${name}`);
-
-	return {
-		props: data,
-		revalidate: 60 * 60 * 12,
-	};
-};

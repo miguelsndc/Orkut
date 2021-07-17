@@ -6,8 +6,10 @@ import Box from '@components/Box';
 
 import * as S from '@styles/pages/FriendList';
 import Image from 'next/image';
-import Link from 'next/Link';
+import Link from 'next/link';
 import CreateCommunityForm from '@components/CreateCommunityForm';
+import { useQuery } from '@apollo/client';
+import Spinner from '@components/Spinner';
 
 type Community = {
 	__typename: string;
@@ -17,12 +19,15 @@ type Community = {
 	creatorSlug: string;
 };
 
-type AllCommunitiesProps = {
-	communities: Community[];
+type AllCommunities = {
+	allCommunities: Community[];
 };
 
-export default function AllCommunities({ communities }: AllCommunitiesProps) {
-	console.log(communities);
+export default function AllCommunities() {
+	const { data, error, loading } = useQuery<AllCommunities>(
+		QUERY_ALL_COMMUNITIES
+	);
+
 	return (
 		<S.Container>
 			<div className='profile'>
@@ -40,8 +45,10 @@ export default function AllCommunities({ communities }: AllCommunitiesProps) {
 				<h4 className='subTitle'>Comunidades Existentes</h4>
 				<S.Table>
 					<tbody>
-						{communities.map(community => {
-							return (
+						{loading ? (
+							<Spinner />
+						) : (
+							data.allCommunities.map(community => (
 								<tr key={community.id}>
 									<Image
 										src={community.imageUrl}
@@ -55,26 +62,11 @@ export default function AllCommunities({ communities }: AllCommunitiesProps) {
 										<span>@{community.creatorSlug}</span>
 									</div>
 								</tr>
-							);
-						})}
+							))
+						)}
 					</tbody>
 				</S.Table>
 			</Box>
 		</S.Container>
 	);
 }
-
-export const getServerSideProps: GetServerSideProps = async (
-	ctx: GetServerSidePropsContext
-) => {
-	const { data } = await client.query({
-		query: QUERY_ALL_COMMUNITIES,
-		variables: {},
-	});
-
-	return {
-		props: {
-			communities: data.allCommunities,
-		},
-	};
-};

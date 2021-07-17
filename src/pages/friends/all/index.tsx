@@ -5,13 +5,20 @@ import { Follower } from 'src/types/Follower';
 import api from 'src/services/api';
 import Image from 'next/image';
 import * as S from '@styles/pages/FriendList';
-import Link from 'next/Link';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
-type AllFriendsProps = {
-	data: Follower[];
-};
+export default function FriendList() {
+	const [followers, setFollowers] = useState<Follower[]>([]);
 
-export default function FriendList({ data }: AllFriendsProps) {
+	const githubUser = 'miguelsndc';
+
+	useEffect(() => {
+		api.get<Follower[]>(`/users/${githubUser}/followers`).then(({ data }) => {
+			setFollowers(data);
+		});
+	}, []);
+
 	return (
 		<S.Container>
 			<div className='profile'>
@@ -24,42 +31,29 @@ export default function FriendList({ data }: AllFriendsProps) {
 				</div>
 				<S.Table>
 					<tbody>
-						{data.map(follower => {
-							return (
-								<tr key={follower.id}>
-									<Image
-										src={follower.avatar_url}
-										width={184}
-										height={184}
-										placeholder='blur'
-										blurDataURL={follower.avatar_url}
-									/>
-									<div>
-										<Link href={`/friends/${follower.login}`}>
-											<h3>{follower.login}</h3>
-										</Link>
-										<span>{follower.url}</span>
-									</div>
-								</tr>
-							);
-						})}
+						{followers.length > 0 &&
+							followers.map(follower => {
+								return (
+									<tr key={follower.id}>
+										<Image
+											src={follower.avatar_url}
+											width={184}
+											height={184}
+											placeholder='blur'
+											blurDataURL={follower.avatar_url}
+										/>
+										<div>
+											<Link href={`/friends/${follower.login}`}>
+												<h3>{follower.login}</h3>
+											</Link>
+											<span>{follower.url}</span>
+										</div>
+									</tr>
+								);
+							})}
 					</tbody>
 				</S.Table>
 			</Box>
 		</S.Container>
 	);
 }
-
-export const getServerSideProps: GetServerSideProps = async (
-	ctx: GetServerSidePropsContext
-) => {
-	const githubUser = 'miguelsndc';
-
-	const { data } = await api.get<Follower[]>(`/users/${githubUser}/followers`);
-
-	return {
-		props: {
-			data,
-		},
-	};
-};
