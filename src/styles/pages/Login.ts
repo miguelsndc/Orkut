@@ -77,7 +77,7 @@ const LoginScreen = css`
 				}
 
 				strong {
-					color: ${({ theme }) => theme.quarternaryText};
+					color: ${({ theme }) => theme.primaryElement};
 				}
 			}
 		}
@@ -149,7 +149,7 @@ const LoginScreen = css`
 				margin: 0 0.35rem;
 			}
 
-			background: ${({ theme }) => theme.backgroundQuarternary};
+			background: ${({ theme }) => theme.backgroundDefault};
 		}
 	}
 `;
