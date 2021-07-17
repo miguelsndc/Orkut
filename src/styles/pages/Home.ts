@@ -9,9 +9,15 @@ export const GridItem = styled.div<ContainerProps>`
 `;
 
 export const ProfileRelationsWrapper = styled.ul`
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
 	list-style: none;
-	gap: 0.5rem;
-	max-height: 220px;
+
+	a {
+		color: ${({ theme }) => theme.primaryElement};
+		text-decoration: none;
+		font-weight: 600;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
 `;
