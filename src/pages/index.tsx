@@ -17,9 +17,10 @@ import CreatePostForm from '@components/CreatePostForm';
 import Post from '@components/Post';
 
 type PostType = {
-	title: string;
+	id: string;
 	content: string;
-	authorPicture: string;
+	author: string;
+	createdAt: string;
 };
 
 type QueryPosts = {
