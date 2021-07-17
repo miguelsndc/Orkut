@@ -1,7 +1,4 @@
 import { createGlobalStyle } from 'styled-components';
-
-import { AlurakutStyles } from 'src/lib/common';
-
 export const GlobalStyles = createGlobalStyle`
 	* {
 		margin: 0;
@@ -15,6 +12,7 @@ export const GlobalStyles = createGlobalStyle`
 					color: #fff;
 				}
 	}
+
 	body {
 		background: ${({ theme }) => theme.backgroundDefault};
 
