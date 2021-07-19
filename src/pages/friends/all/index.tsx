@@ -1,22 +1,37 @@
 import Box from '@components/Box';
 import ProfileSidebar from '@components/ProfileSidebar';
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { Follower } from 'src/types/Follower';
 import api from 'src/services/api';
 import Image from 'next/image';
 import * as S from '@styles/pages/FriendList';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import Spinner from '@components/Spinner';
 
 export default function FriendList() {
 	const [followers, setFollowers] = useState<Follower[]>([]);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const githubUser = 'miguelsndc';
 
-	useEffect(() => {
-		api.get<Follower[]>(`/users/${githubUser}/followers`).then(({ data }) => {
+	async function getFollowers() {
+		setIsLoading(true);
+
+		try {
+			const { data } = await api.get<Follower[]>(
+				`/users/${githubUser}/followers`
+			);
+
 			setFollowers(data);
-		});
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setIsLoading(false);
+		}
+	}
+
+	useEffect(() => {
+		getFollowers();
 	}, []);
 
 	return (
@@ -31,26 +46,32 @@ export default function FriendList() {
 				</div>
 				<S.Table>
 					<tbody>
-						{followers.length > 0 &&
-							followers.map(follower => {
-								return (
-									<tr key={follower.id}>
-										<Image
-											src={follower.avatar_url}
-											width={184}
-											height={184}
-											placeholder='blur'
-											blurDataURL={follower.avatar_url}
-										/>
-										<div>
-											<Link href={`/friends/${follower.login}`}>
-												<h3>{follower.login}</h3>
-											</Link>
-											<span>{follower.url}</span>
-										</div>
-									</tr>
-								);
-							})}
+						{isLoading ? (
+							<Spinner />
+						) : (
+							<>
+								{followers.length > 0 &&
+									followers.map(follower => {
+										return (
+											<tr key={follower.id}>
+												<Image
+													src={follower.avatar_url}
+													width={184}
+													height={184}
+													placeholder='blur'
+													blurDataURL={follower.avatar_url}
+												/>
+												<div>
+													<Link href={`/friends/${follower.login}`}>
+														<h3>{follower.login}</h3>
+													</Link>
+													<span>{follower.url}</span>
+												</div>
+											</tr>
+										);
+									})}
+							</>
+						)}
 					</tbody>
 				</S.Table>
 			</Box>
