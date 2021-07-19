@@ -1,0 +1,8 @@
+# GraphQL
+
+query GetPost($id: ItemId) {
+	post(filter: { id: { eq: $id } }) {
+		author
+		content
+	}
+}
