@@ -30,11 +30,29 @@ export const Container = styled.div`
 	p {
 		word-wrap: break-word;
 		overflow-wrap: break-word;
+		margin-bottom: 0.75rem;
 	}
 
 	h2 {
 		margin-top: 0.25rem;
 		color: ${({ theme }) => theme.gray1};
 		margin-bottom: 1rem;
+	}
+
+	.options {
+		margin-top: 0.75rem;
+		display: flex;
+		justify-content: flex-end;
+		padding: 0 5%;
+
+		a {
+			color: ${({ theme }) => theme.primaryElement};
+
+			text-decoration: none;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
 	}
 `;

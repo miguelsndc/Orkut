@@ -1,5 +1,6 @@
 import Box from '@components/Box';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Container } from './styles';
 
 import { parseISO, format } from 'date-fns';
@@ -39,6 +40,10 @@ export default function Post({ post }: PostProps) {
 				</div>
 				<hr />
 				<p>{post.content}</p>
+				<hr />
+				<div className='options'>
+					<Link href={`/posts/${post.id}`}>Responder</Link>
+				</div>
 			</Box>
 		</Container>
 	);
