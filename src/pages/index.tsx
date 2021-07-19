@@ -8,8 +8,8 @@ import Box from '@components/Box';
 import Link from 'next/link';
 
 import { Follower } from 'src/types/Follower';
-import QUERY_ALL_COMMUNITIES from 'src/graphql/queryAllCommunities.graphql';
-import QUERY_ALL_POSTS from 'src/graphql/queryAllPosts.graphql';
+import QUERY_ALL_COMMUNITIES from 'src/graphql/queries/allCommunities.graphql';
+import QUERY_ALL_POSTS from 'src/graphql/queries/allPosts.graphql';
 
 import * as S from '@styles/pages/Home';
 import api from 'src/services/api';
