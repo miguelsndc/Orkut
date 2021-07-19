@@ -1,6 +1,4 @@
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import QUERY_ALL_COMMUNITIES from 'src/graphql/queryAllCommunities.graphql';
-import client from 'src/config/apolloClient';
+import QUERY_ALL_COMMUNITIES from 'src/graphql/queries/allCommunities.graphql';
 import ProfileSidebar from '@components/ProfileSidebar';
 import Box from '@components/Box';
 
