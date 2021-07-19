@@ -13,10 +13,12 @@ export default function FriendDetails() {
 	const { name } = router.query;
 
 	useEffect(() => {
-		api.get<GithubUser>(`/users/${name}`).then(({ data }) => {
-			setUser(data);
-		});
-	}, []);
+		if (name && !user) {
+			api.get<GithubUser>(`/users/${name}`).then(({ data }) => {
+				setUser(data);
+			});
+		}
+	}, [name]);
 
 	return (
 		<Container>
