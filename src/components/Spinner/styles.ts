@@ -16,10 +16,10 @@ export const Spinner = styled.div`
 		box-sizing: border-box;
 		display: block;
 		position: absolute;
-		width: 64px;
-		height: 64px;
+		width: 36px;
+		height: 36px;
 		margin: 8px;
-		border: 8px solid ${({ theme }) => theme.primaryElement};
+		border: 4px solid ${({ theme }) => theme.primaryElement};
 		border-radius: 50%;
 		animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 		border-color: ${({ theme }) => theme.primaryElement} transparent transparent
