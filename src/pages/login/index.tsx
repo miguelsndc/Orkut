@@ -1,13 +1,22 @@
 import * as S from '@styles/pages/Login';
+import { useRouter } from 'next/dist/client/router';
 
 import Image from 'next/image';
+import { useAuth } from 'src/hooks/useAuth';
 
 export default function Login() {
-	function handleGithubSignIn() {
-		console.log('log');
+	const { loginWithGithub, user } = useAuth();
+
+	const router = useRouter();
+
+	// if (user) router.push('/');
+
+	async function handleGithubSignIn() {
+		await loginWithGithub();
+		router.push('/');
 	}
 
-	return (
+	const LoginTemplate = () => (
 		<S.Wrapper>
 			<div className='container'>
 				<div className='logoArea'>
@@ -48,4 +57,6 @@ export default function Login() {
 			</div>
 		</S.Wrapper>
 	);
+
+	return <LoginTemplate />;
 }
