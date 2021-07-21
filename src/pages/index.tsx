@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import nookies from 'nookies';
 
 import CommunitySmall from '@components/CommunitySmall';
 import ProfileSidebar from '@components/ProfileSidebar';
@@ -18,8 +19,16 @@ import CreatePostForm from '@components/CreatePostForm';
 import Post from '@components/Post';
 import FriendSmall from '@components/FriendSmall';
 import Spinner from '@components/Spinner';
+import { useAuth } from 'src/hooks/useAuth';
+import {
+	GetServerSideProps,
+	GetServerSidePropsContext,
+	InferGetServerSidePropsType,
+} from 'next';
+import { firebaseAdmin } from 'src/services/firebase/adminConfig';
+import client from 'src/config/apolloClient';
 
-type PostType = {
+export type PostType = {
 	id: string;
 	content: string;
 	author: string;
@@ -30,39 +39,41 @@ type QueryPosts = {
 	allPosts: PostType[];
 };
 
-export default function Home() {
-	const githubUser = 'miguelsndc';
+export type User = {
+	name: any;
+	picture: string;
+	email: string;
+	uid: any;
+};
 
-	const communities = useQuery(QUERY_ALL_COMMUNITIES);
-	const posts = useQuery<QueryPosts>(QUERY_ALL_POSTS);
+type HomeProps = {
+	posts: PostType[];
+	communities: any[];
+	followers: Follower[];
+	user: User;
+};
 
-	const [followers, setFollowers] = useState<Follower[]>([]);
-	const [mostRecentPost, setMostRecentPost] = useState<PostType>(
-		{} as PostType
-	);
-
-	useEffect(() => {
-		api.get<Follower[]>(`/users/${githubUser}/followers`).then(response => {
-			const { data } = response;
-			setFollowers(data);
-		});
-	}, []);
+export default function Home({
+	communities,
+	followers,
+	posts,
+	user,
+}: HomeProps) {
+	const [postsState, setPostsState] = useState(posts);
 
 	return (
 		<MainGrid>
 			<S.GridItem className='profileArea' gridArea='profileArea'>
-				<ProfileSidebar user={'miguelsndc'} />
+				<ProfileSidebar user={user} />
 			</S.GridItem>
 			<S.GridItem className='welcomeArea' gridArea='welcomeArea'>
 				<Box>
-					<CreatePostForm />
+					<CreatePostForm onUiUpdate={setPostsState} />
 				</Box>
 
-				{posts.loading ? (
-					<Spinner />
-				) : (
-					posts.data.allPosts.map(post => <Post post={post} key={post.id} />)
-				)}
+				{postsState.map(post => (
+					<Post post={post} key={post.id} />
+				))}
 			</S.GridItem>
 			<S.GridItem
 				className='profileRelationsArea'
@@ -86,25 +97,16 @@ export default function Home() {
 				</Box>
 				<Box>
 					<h2 className='smallTitle'>
-						Comunidades{' '}
-						<span>
-							({!communities.loading && communities.data.allCommunities.length})
-						</span>
+						Comunidades <span>({communities.length})</span>
 					</h2>
 					<S.ProfileRelationsWrapper>
-						{communities.loading ? (
-							<Spinner />
-						) : (
-							communities.data.allCommunities
-								.slice(0, 6)
-								.map(community => (
-									<CommunitySmall
-										key={community.id}
-										name={community.title}
-										imageURL={community.imageUrl}
-									/>
-								))
-						)}
+						{communities.slice(0, 6).map(community => (
+							<CommunitySmall
+								key={community.id}
+								name={community.title}
+								imageURL={community.imageUrl}
+							/>
+						))}
 						<hr />
 						<Link href='/communities/all'>Ver Todas</Link>
 					</S.ProfileRelationsWrapper>
@@ -113,3 +115,57 @@ export default function Home() {
 		</MainGrid>
 	);
 }
+
+export const getServerSideProps: GetServerSideProps = async (
+	ctx: GetServerSidePropsContext
+) => {
+	let token: firebaseAdmin.auth.DecodedIdToken;
+
+	try {
+		const cookies = nookies.get(ctx);
+		token = await firebaseAdmin.auth().verifyIdToken(cookies.token);
+		console.log(token);
+	} catch (error) {
+		console.log(error);
+		return {
+			redirect: {
+				permanent: false,
+				statusCode: 302,
+				destination: '/login',
+			},
+		};
+	}
+
+	const githubUserId = token.firebase.identities['github.com'][0];
+
+	const communities = await client.query({
+		query: QUERY_ALL_COMMUNITIES,
+	});
+
+	const posts = await client.query<QueryPosts>({
+		query: QUERY_ALL_POSTS,
+	});
+
+	const followersResponse = await api.get<Follower[]>(
+		`/user/${githubUserId}/followers`,
+		{
+			headers: {
+				Authorization: `token ${process.env.GITHUB_ACESS_TOKEN}`,
+			},
+		}
+	);
+
+	return {
+		props: {
+			posts: posts.data.allPosts,
+			communities: communities.data.allCommunities,
+			followers: followersResponse.data,
+			user: {
+				name: token.name,
+				picture: token.picture,
+				email: token.email,
+				uid: githubUserId,
+			},
+		},
+	};
+};
