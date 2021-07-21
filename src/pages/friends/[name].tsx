@@ -2,28 +2,31 @@ import { GithubUser } from 'src/types/GithubUser';
 import api from 'src/services/api';
 import ProfileSidebar from '@components/ProfileSidebar';
 import { Container } from '@styles/pages/FriendList';
-import { useRouter } from 'next/dist/client/router';
-import { useEffect, useState } from 'react';
 import Spinner from '@components/Spinner';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
-export default function FriendDetails() {
-	const [user, setUser] = useState<GithubUser>();
-	const router = useRouter();
+type FriendDetailsProps = {
+	user: GithubUser;
+};
 
-	const { name } = router.query;
-
-	useEffect(() => {
-		if (name && !user) {
-			api.get<GithubUser>(`/users/${name}`).then(({ data }) => {
-				setUser(data);
-			});
-		}
-	}, [name]);
-
+export default function FriendDetails({ user }: FriendDetailsProps) {
 	return (
 		<Container>
-			{user ? <ProfileSidebar user={user.login} /> : <Spinner />}
-			<div></div>
+			<div>PÁGINA EM CONSTRUÇÃO</div>
 		</Container>
 	);
 }
+
+// export const getServerSideProps: GetServerSideProps = async ({
+// 	params,
+// }: GetServerSidePropsContext) => {
+// 	const { name } = params;
+
+// 	const { data } = await api.get<GithubUser>(`/users/${name}`);
+
+// 	return {
+// 		props: {
+// 			user: data,
+// 		},
+// 	};
+// };
