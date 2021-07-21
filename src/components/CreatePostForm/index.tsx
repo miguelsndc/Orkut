@@ -4,27 +4,51 @@ import * as S from './styles';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import TextareaAutosize from 'react-textarea-autosize';
+import { Dispatch, SetStateAction } from 'react';
+import { PostType } from 'src/pages';
+import { useAuth } from 'src/hooks/useAuth';
 
 type FormData = {
 	content: string;
 };
 
-export default function CreatePostForm() {
+type CreatePostFormProps = {
+	onUiUpdate: Dispatch<SetStateAction<PostType[]>>;
+};
+
+export default function CreatePostForm({ onUiUpdate }: CreatePostFormProps) {
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
+		reset,
 	} = useForm<FormData>();
 
+	const { user } = useAuth();
+
 	async function handleCreatePost(data: FormData) {
+		const newPost: PostType = {
+			id: `${Date.now()} - ${Math.random()}`,
+			author: user.name,
+			content: data.content,
+			createdAt: new Date().toISOString(),
+		};
+
 		try {
 			await axios.post('/api/posts', {
-				title: 'a',
-				author: 'miguelsndc',
+				author: user.name,
 				content: data.content,
 			});
 
 			toast.success('Post Adicionado!');
+
+			reset({
+				content: '',
+			});
+
+			onUiUpdate(prevPosts => {
+				return [newPost, ...prevPosts];
+			});
 		} catch (error) {
 			toast.error('Houve um Erro :(');
 		}
