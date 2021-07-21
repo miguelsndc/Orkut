@@ -47,19 +47,14 @@ export type User = {
 };
 
 type HomeProps = {
-	posts: PostType[];
 	communities: any[];
 	followers: Follower[];
 	user: User;
 };
 
-export default function Home({
-	communities,
-	followers,
-	posts,
-	user,
-}: HomeProps) {
-	const [postsState, setPostsState] = useState(posts);
+export default function Home({ communities, followers, user }: HomeProps) {
+	const { data, error, loading, refetch } =
+		useQuery<QueryPosts>(QUERY_ALL_POSTS);
 
 	return (
 		<MainGrid>
@@ -68,12 +63,14 @@ export default function Home({
 			</S.GridItem>
 			<S.GridItem className='welcomeArea' gridArea='welcomeArea'>
 				<Box>
-					<CreatePostForm onUiUpdate={setPostsState} />
+					<CreatePostForm onUiUpdate={() => refetch()} />
 				</Box>
 
-				{postsState.map(post => (
-					<Post post={post} key={post.id} />
-				))}
+				{loading ? (
+					<Spinner />
+				) : (
+					data.allPosts.map(post => <Post post={post} key={post.id} />)
+				)}
 			</S.GridItem>
 			<S.GridItem
 				className='profileRelationsArea'
@@ -123,10 +120,13 @@ export const getServerSideProps: GetServerSideProps = async (
 
 	try {
 		const cookies = nookies.get(ctx);
+
+		if (!cookies.token) {
+			throw new Error('No token was found');
+		}
+
 		token = await firebaseAdmin.auth().verifyIdToken(cookies.token);
-		console.log(token);
 	} catch (error) {
-		console.log(error);
 		return {
 			redirect: {
 				permanent: false,
@@ -142,10 +142,6 @@ export const getServerSideProps: GetServerSideProps = async (
 		query: QUERY_ALL_COMMUNITIES,
 	});
 
-	const posts = await client.query<QueryPosts>({
-		query: QUERY_ALL_POSTS,
-	});
-
 	const followersResponse = await api.get<Follower[]>(
 		`/user/${githubUserId}/followers`,
 		{
@@ -157,7 +153,6 @@ export const getServerSideProps: GetServerSideProps = async (
 
 	return {
 		props: {
-			posts: posts.data.allPosts,
 			communities: communities.data.allCommunities,
 			followers: followersResponse.data,
 			user: {

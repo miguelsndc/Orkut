@@ -4,8 +4,6 @@ import * as S from './styles';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import TextareaAutosize from 'react-textarea-autosize';
-import { Dispatch, SetStateAction } from 'react';
-import { PostType } from 'src/pages';
 import { useAuth } from 'src/hooks/useAuth';
 
 type FormData = {
@@ -13,7 +11,7 @@ type FormData = {
 };
 
 type CreatePostFormProps = {
-	onUiUpdate: Dispatch<SetStateAction<PostType[]>>;
+	onUiUpdate: () => void;
 };
 
 export default function CreatePostForm({ onUiUpdate }: CreatePostFormProps) {
@@ -27,13 +25,6 @@ export default function CreatePostForm({ onUiUpdate }: CreatePostFormProps) {
 	const { user } = useAuth();
 
 	async function handleCreatePost(data: FormData) {
-		const newPost: PostType = {
-			id: `${Date.now()} - ${Math.random()}`,
-			author: user.name,
-			content: data.content,
-			createdAt: new Date().toISOString(),
-		};
-
 		try {
 			await axios.post('/api/posts', {
 				author: user.name,
@@ -46,9 +37,7 @@ export default function CreatePostForm({ onUiUpdate }: CreatePostFormProps) {
 				content: '',
 			});
 
-			onUiUpdate(prevPosts => {
-				return [newPost, ...prevPosts];
-			});
+			onUiUpdate();
 		} catch (error) {
 			toast.error('Houve um Erro :(');
 		}
