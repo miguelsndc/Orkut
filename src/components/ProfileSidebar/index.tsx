@@ -1,10 +1,6 @@
 import Box from '@components/Box';
 import Image from 'next/image';
 
-type ProfileSidebarProps = {
-	user: string;
-};
-
 import * as S from './styles';
 
 import {
@@ -16,7 +12,13 @@ import {
 	IoChatbubbleEllipsesOutline,
 } from 'react-icons/io5';
 
+import { User } from 'src/pages';
+
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
+type ProfileSidebarProps = {
+	user: User;
+};
 
 function ProfileSidebarMenuDefault() {
 	return (
@@ -55,29 +57,24 @@ function ProfileSidebarMenuDefault() {
 }
 
 export default function ProfileSidebar({ user }: ProfileSidebarProps) {
-	const loader = ({ src }) => {
-		return `https://github.com/${src}`;
-	};
-
 	return (
 		<Box>
 			<div>
 				<div>
 					<Image
 						className='profile-picture'
-						loader={loader}
-						src={`${user}.png`}
-						alt={`${user}`}
+						src={user.picture}
+						alt={`${user.name}`}
 						width={360}
 						height={360}
 						placeholder='blur'
-						blurDataURL={`https://github.com/${user}.png`}
+						blurDataURL={user.picture}
 					/>
 
 					<hr />
 
 					<h2 className='profile-name'>
-						<a href={`/user/${user}`}>@{user}</a>
+						<a href={`/user/${user.uid}`}>@{user.name}</a>
 					</h2>
 
 					<hr />
