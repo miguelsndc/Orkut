@@ -8,6 +8,8 @@ import Menu from '@components/Menu';
 import { ApolloProvider } from '@apollo/client';
 import { IconContext } from 'react-icons';
 import client from 'src/config/apolloClient';
+import { AuthProvider } from 'src/context/AuthContext';
+
 
 export default function App({ Component, pageProps }: AppProps) {
 	return (
