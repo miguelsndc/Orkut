@@ -5,6 +5,7 @@ import { Container } from './styles';
 
 import { parseISO, format } from 'date-fns';
 import PTBR from 'date-fns/locale/pt-BR';
+import { useAuth } from 'src/hooks/useAuth';
 
 type Post = {
 	id: string;
@@ -17,6 +18,8 @@ type PostProps = {
 	post: Post;
 };
 export default function Post({ post }: PostProps) {
+	const { user } = useAuth();
+
 	const createdAt = parseISO(post.createdAt);
 	const formattedDate = format(createdAt, "dd 'de' MMMM', às ' HH:mm'h'", {
 		locale: PTBR,
@@ -26,13 +29,15 @@ export default function Post({ post }: PostProps) {
 		<Container>
 			<Box>
 				<div className='author'>
-					<Image
-						src='https://github.com/miguelsndc.png'
-						placeholder='blur'
-						blurDataURL='https://github.com/miguelsndc.png'
-						width={128}
-						height={128}
-					/>
+					{user && (
+						<Image
+							src={user.photo}
+							placeholder='blur'
+							blurDataURL={user.photo}
+							width={128}
+							height={128}
+						/>
+					)}
 					<div>
 						<h4>{post.author}</h4>
 						<span>{formattedDate}</span>
