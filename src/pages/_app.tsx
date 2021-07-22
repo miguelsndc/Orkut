@@ -1,17 +1,18 @@
 import Router from 'next/router';
 import Head from 'next/head';
 import NProgress from 'nprogress';
-
-import type { AppProps } from 'next/app';
-import { ThemeProvider } from 'styled-components';
-import { Toaster } from 'react-hot-toast';
-import { GlobalStyles } from '@styles/globals';
-
-import lightTheme from '@styles/theme/light';
 import { ApolloProvider } from '@apollo/client';
+import { ThemeProvider } from 'styled-components';
+import { AppProps } from 'next/app';
 import { IconContext } from 'react-icons';
-import client from 'src/config/apolloClient';
+import { Toaster } from 'react-hot-toast';
+
 import { AuthProvider } from 'src/context/AuthContext';
+
+import { GlobalStyles } from '@styles/globals';
+import lightTheme from '@styles/theme/light';
+
+import client from 'src/config/apolloClient';
 
 import 'src/services/firebase/config';
 import '@styles/nprogress.css';
