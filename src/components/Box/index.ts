@@ -46,7 +46,8 @@ const Box = styled.div`
 	.profile-name a {
 		color: ${({ theme }) => theme.primaryElement};
 
-		font-size: 1.2rem;
+		font-size: 1rem;
+		font-weight: 500;
 		text-decoration: none;
 	}
 	hr {
