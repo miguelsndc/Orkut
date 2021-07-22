@@ -25,22 +25,27 @@ export default function CreatePostForm({ onUiUpdate }: CreatePostFormProps) {
 	const { user } = useAuth();
 
 	async function handleCreatePost(data: FormData) {
-		try {
-			await axios.post('/api/posts', {
-				author: user.name,
+		await toast.promise(
+			axios.post('/api/posts', {
+				author: {
+					name: user.name,
+					picture: user.picture,
+					githubId: user.uid,
+				},
 				content: data.content,
-			});
+			}),
+			{
+				loading: 'Postando...',
+				success: <b>Post Criado!</b>,
+				error: <b>Não pude criar o Post.</b>,
+			}
+		);
 
-			toast.success('Post Adicionado!');
+		reset({
+			content: '',
+		});
 
-			reset({
-				content: '',
-			});
-
-			onUiUpdate();
-		} catch (error) {
-			toast.error('Houve um Erro :(');
-		}
+		onUiUpdate();
 	}
 
 	return (
