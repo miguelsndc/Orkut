@@ -1,4 +1,5 @@
 import Router from 'next/router';
+import Head from 'next/head';
 import NProgress from 'nprogress';
 
 import type { AppProps } from 'next/app';
@@ -21,20 +22,25 @@ Router.events.on('routeChangeError', () => NProgress.done());
 
 export default function App({ Component, pageProps }: AppProps) {
 	return (
-		<ThemeProvider theme={lightTheme}>
-			<GlobalStyles />
-			<Toaster />
-			<main>
-				<AuthProvider>
-					<ApolloProvider client={client}>
-						<IconContext.Provider
-							value={{ color: lightTheme.gray1, size: '1.2rem' }}
-						>
-							<Component {...pageProps} />
-						</IconContext.Provider>
-					</ApolloProvider>
-				</AuthProvider>
-			</main>
-		</ThemeProvider>
+		<>
+			<Head>
+				<link rel='shortcut icon' href='/favicon.ico' />
+			</Head>
+			<ThemeProvider theme={lightTheme}>
+				<GlobalStyles />
+				<Toaster />
+				<main>
+					<AuthProvider>
+						<ApolloProvider client={client}>
+							<IconContext.Provider
+								value={{ color: lightTheme.gray1, size: '1.2rem' }}
+							>
+								<Component {...pageProps} />
+							</IconContext.Provider>
+						</ApolloProvider>
+					</AuthProvider>
+				</main>
+			</ThemeProvider>
+		</>
 	);
 }
