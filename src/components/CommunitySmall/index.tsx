@@ -1,12 +1,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import * as S from './styles';
+
 type ProfileProps = {
 	name: string;
 	imageURL: string;
 };
-
-import * as S from './styles';
 
 export default function CommunitySmall({ name, imageURL }: ProfileProps) {
 	return (
