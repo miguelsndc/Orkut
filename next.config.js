@@ -15,6 +15,7 @@ module.exports = {
 			'avatars.githubusercontent.com',
 			'pbs.twimg.com',
 			'i.pinimg.com',
+			'www.datocms-assets.com',
 		],
 	},
 };
