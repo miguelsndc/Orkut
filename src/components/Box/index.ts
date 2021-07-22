@@ -84,7 +84,7 @@ const Box = styled.div`
 		padding: 0.5rem 0.75rem;
 
 		border: 0;
-		border-radius: 10000px;
+		border-radius: 8px;
 
 		font: inherit;
 		cursor: pointer;
