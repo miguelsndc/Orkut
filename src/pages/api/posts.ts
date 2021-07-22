@@ -15,7 +15,7 @@ export default async function requestHandler(
 		const record = await client.items.create({
 			itemType: ModelId,
 			content: req.body.content,
-			author: req.body.author,
+			author: JSON.stringify(req.body.author),
 		});
 
 		res.json({
