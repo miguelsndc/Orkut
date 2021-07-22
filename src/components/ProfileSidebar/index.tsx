@@ -14,8 +14,6 @@ import {
 
 import { User } from 'src/pages';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-
 type ProfileSidebarProps = {
 	user: User;
 };
