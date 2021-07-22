@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import nookies from 'nookies';
 
+import Head from 'next/head';
+
 import CommunitySmall from '@components/CommunitySmall';
 import ProfileSidebar from '@components/ProfileSidebar';
 import MainGrid from '@components/MainGrid';
@@ -27,11 +29,18 @@ import {
 } from 'next';
 import { firebaseAdmin } from 'src/services/firebase/adminConfig';
 import client from 'src/config/apolloClient';
+import Menu from '@components/Menu';
+
+type Author = {
+	name: string;
+	picture: string;
+	githubId: string;
+};
 
 export type PostType = {
 	id: string;
 	content: string;
-	author: string;
+	author: Author;
 	createdAt: string;
 };
 
@@ -57,59 +66,65 @@ export default function Home({ communities, followers, user }: HomeProps) {
 		useQuery<QueryPosts>(QUERY_ALL_POSTS);
 
 	return (
-		<MainGrid>
-			<S.GridItem className='profileArea' gridArea='profileArea'>
-				<ProfileSidebar user={user} />
-			</S.GridItem>
-			<S.GridItem className='welcomeArea' gridArea='welcomeArea'>
-				<Box>
-					<CreatePostForm onUiUpdate={() => refetch()} />
-				</Box>
+		<>
+			<Head>
+				<title>Orkut | Home</title>
+			</Head>
+			<Menu githubUser={'miguelsndc'} />
+			<MainGrid>
+				<S.GridItem className='profileArea' gridArea='profileArea'>
+					<ProfileSidebar user={user} />
+				</S.GridItem>
+				<S.GridItem className='welcomeArea' gridArea='welcomeArea'>
+					<Box>
+						<CreatePostForm onUiUpdate={() => refetch()} />
+					</Box>
 
-				{loading ? (
-					<Spinner />
-				) : (
-					data.allPosts.map(post => <Post post={post} key={post.id} />)
-				)}
-			</S.GridItem>
-			<S.GridItem
-				className='profileRelationsArea'
-				gridArea='profileRelationsArea'
-			>
-				<Box>
-					<h2 className='smallTitle'>
-						Meus Amigos <span>({followers.length})</span>
-					</h2>
-					<S.ProfileRelationsWrapper>
-						{followers.slice(0, 6).map(follower => (
-							<FriendSmall
-								key={follower.id}
-								name={follower.login}
-								imageURL={follower.avatar_url}
-							/>
-						))}
-						<hr />
-						<Link href='/friends/all'>Ver Todos</Link>
-					</S.ProfileRelationsWrapper>
-				</Box>
-				<Box>
-					<h2 className='smallTitle'>
-						Comunidades <span>({communities.length})</span>
-					</h2>
-					<S.ProfileRelationsWrapper>
-						{communities.slice(0, 6).map(community => (
-							<CommunitySmall
-								key={community.id}
-								name={community.title}
-								imageURL={community.imageUrl}
-							/>
-						))}
-						<hr />
-						<Link href='/communities/all'>Ver Todas</Link>
-					</S.ProfileRelationsWrapper>
-				</Box>
-			</S.GridItem>
-		</MainGrid>
+					{loading ? (
+						<Spinner />
+					) : (
+						data.allPosts.map(post => <Post post={post} key={post.id} />)
+					)}
+				</S.GridItem>
+				<S.GridItem
+					className='profileRelationsArea'
+					gridArea='profileRelationsArea'
+				>
+					<Box>
+						<h2 className='smallTitle'>
+							Meus Amigos <span>({followers.length})</span>
+						</h2>
+						<S.ProfileRelationsWrapper>
+							{followers.slice(0, 6).map(follower => (
+								<FriendSmall
+									key={follower.id}
+									name={follower.login}
+									imageURL={follower.avatar_url}
+								/>
+							))}
+							<hr />
+							<Link href='/friends/all'>Ver Todos</Link>
+						</S.ProfileRelationsWrapper>
+					</Box>
+					<Box>
+						<h2 className='smallTitle'>
+							Comunidades <span>({communities.length})</span>
+						</h2>
+						<S.ProfileRelationsWrapper>
+							{communities.slice(0, 6).map(community => (
+								<CommunitySmall
+									key={community.id}
+									name={community.title}
+									imageURL={community.imageUrl}
+								/>
+							))}
+							<hr />
+							<Link href='/communities/all'>Ver Todas</Link>
+						</S.ProfileRelationsWrapper>
+					</Box>
+				</S.GridItem>
+			</MainGrid>
+		</>
 	);
 }
 
@@ -130,7 +145,6 @@ export const getServerSideProps: GetServerSideProps = async (
 		return {
 			redirect: {
 				permanent: false,
-				statusCode: 302,
 				destination: '/login',
 			},
 		};

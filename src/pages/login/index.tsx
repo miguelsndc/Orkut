@@ -2,6 +2,7 @@ import * as S from '@styles/pages/Login';
 import { useRouter } from 'next/dist/client/router';
 
 import Image from 'next/image';
+import Head from 'next/head';
 import { useAuth } from 'src/hooks/useAuth';
 
 export default function Login() {
@@ -58,5 +59,10 @@ export default function Login() {
 		</S.Wrapper>
 	);
 
-	return <LoginTemplate />;
+	return (
+		<>
+			<Head>Login | Orkut</Head>
+			<LoginTemplate />
+		</>
+	);
 }

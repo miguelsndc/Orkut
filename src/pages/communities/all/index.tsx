@@ -4,12 +4,14 @@ import Box from '@components/Box';
 import nookies from 'nookies';
 import * as S from '@styles/pages/FriendList';
 import Image from 'next/image';
+import Head from 'next/head';
 import Link from 'next/link';
 import CreateCommunityForm from '@components/CreateCommunityForm';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { firebaseAdmin } from 'src/services/firebase/adminConfig';
 import client from 'src/config/apolloClient';
 import { User } from 'src/pages';
+import Menu from '@components/Menu';
 
 type Community = {
 	title: string;
@@ -30,41 +32,47 @@ export default function AllCommunities({
 	user,
 }: AllCommunitiesProps) {
 	return (
-		<S.Container>
-			<div className='profile'>
-				<ProfileSidebar user={user} />
-			</div>
-			<Box>
-				<h2 className='title'>Comunidades</h2>
-				<div className='path'>
-					<Link href='/'>Início </Link> {'>'} Comunidades
+		<>
+			<Head>
+				<title>Comunidades | Orkut</title>
+			</Head>
+			<Menu githubUser={'miguelsndc'} />
+			<S.Container>
+				<div className='profile'>
+					<ProfileSidebar user={user} />
 				</div>
-				<hr />
-				<h4 className='subTitle'>Criar nova Comunidade</h4>
-				<CreateCommunityForm />
-				<hr />
-				<h4 className='subTitle'>Comunidades Existentes</h4>
-				<S.Table>
-					<tbody>
-						{allCommunities.map(community => (
-							<tr key={community.id}>
-								<Image
-									src={community.imageUrl}
-									width={184}
-									height={184}
-									placeholder='blur'
-									blurDataURL={community.imageUrl}
-								/>
-								<div>
-									<h3>{community.title}</h3>
-									<span>@{community.creatorSlug}</span>
-								</div>
-							</tr>
-						))}
-					</tbody>
-				</S.Table>
-			</Box>
-		</S.Container>
+				<Box>
+					<h2 className='title'>Comunidades</h2>
+					<div className='path'>
+						<Link href='/'>Início </Link> {'>'} Comunidades
+					</div>
+					<hr />
+					<h4 className='subTitle'>Criar nova Comunidade</h4>
+					<CreateCommunityForm />
+					<hr />
+					<h4 className='subTitle'>Comunidades Existentes</h4>
+					<S.Table>
+						<tbody>
+							{allCommunities.map(community => (
+								<tr key={community.id}>
+									<Image
+										src={community.imageUrl}
+										width={184}
+										height={184}
+										placeholder='blur'
+										blurDataURL={community.imageUrl}
+									/>
+									<div>
+										<h3>{community.title}</h3>
+										<span>@{community.creatorSlug}</span>
+									</div>
+								</tr>
+							))}
+						</tbody>
+					</S.Table>
+				</Box>
+			</S.Container>
+		</>
 	);
 }
 
@@ -80,7 +88,6 @@ export const getServerSideProps: GetServerSideProps = async (
 		return {
 			redirect: {
 				permanent: false,
-				statusCode: 302,
 				destination: '/login',
 			},
 		};
