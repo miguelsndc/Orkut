@@ -31,7 +31,7 @@ import { firebaseAdmin } from 'src/services/firebase/adminConfig';
 import client from 'src/config/apolloClient';
 import Menu from '@components/Menu';
 
-type Author = {
+export type Author = {
 	name: string;
 	picture: string;
 	githubId: string;
@@ -115,7 +115,7 @@ export default function Home({ communities, followers, user }: HomeProps) {
 								<CommunitySmall
 									key={community.id}
 									name={community.title}
-									imageURL={community.imageUrl}
+									imageURL={community.poster.url}
 								/>
 							))}
 							<hr />

@@ -10,14 +10,18 @@ import CreateCommunityForm from '@components/CreateCommunityForm';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { firebaseAdmin } from 'src/services/firebase/adminConfig';
 import client from 'src/config/apolloClient';
-import { User } from 'src/pages';
+import { Author, User } from 'src/pages';
 import Menu from '@components/Menu';
 
 type Community = {
-	title: string;
-	imageUrl: string;
 	id: string;
-	creatorSlug: string;
+	title: string;
+	poster: {
+		id: string;
+		url: string;
+		basename: string;
+	};
+	author: Author;
 };
 
 type AllCommunities = {
@@ -56,15 +60,15 @@ export default function AllCommunities({
 							{allCommunities.map(community => (
 								<tr key={community.id}>
 									<Image
-										src={community.imageUrl}
+										src={community.poster.url}
 										width={184}
 										height={184}
 										placeholder='blur'
-										blurDataURL={community.imageUrl}
+										blurDataURL={community.poster.url}
 									/>
 									<div>
 										<h3>{community.title}</h3>
-										<span>@{community.creatorSlug}</span>
+										<span>@{community.author.name}</span>
 									</div>
 								</tr>
 							))}

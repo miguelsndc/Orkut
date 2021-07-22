@@ -50,7 +50,7 @@ export default function FriendList({ followers, user }: FriendListProps) {
 												<Link href={`/friends/${follower.login}`}>
 													<h3>{follower.login}</h3>
 												</Link>
-												<span>{follower.url}</span>
+												<span>{follower.html_url}</span>
 											</div>
 										</tr>
 									);
