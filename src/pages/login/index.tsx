@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { useAuth } from 'src/hooks/useAuth';
 
 export default function Login() {
-	const { loginWithGithub, user } = useAuth();
+	const { loginWithGithub } = useAuth();
 
 	const router = useRouter();
 
@@ -40,7 +40,7 @@ export default function Login() {
 						<p>
 							Acesse o <strong>Alurakut</strong> com a sua conta.
 						</p>
-						<button onClick={handleGithubSignIn}>
+						<button type='button' onClick={handleGithubSignIn}>
 							<Image src='/images/github.svg' width={30} height={30} />
 							<span>Login with Github</span>
 						</button>
@@ -61,7 +61,9 @@ export default function Login() {
 
 	return (
 		<>
-			<Head>Login | Orkut</Head>
+			<Head>
+				<title>Login | Alurakut</title>
+			</Head>
 			<LoginTemplate />
 		</>
 	);
