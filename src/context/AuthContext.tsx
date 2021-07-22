@@ -10,7 +10,7 @@ type AuthProviderProps = {
 type User = {
 	name: string;
 	email: string;
-	photo: string;
+	picture: string;
 	uid: string;
 };
 
@@ -37,10 +37,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			setUser({
 				name: user.displayName,
 				email: user.email,
-				photo: user.photoURL,
+				picture: user.photoURL,
 				uid: user.uid,
 			});
-
 		} catch (error) {
 			console.log(error);
 		}
@@ -56,8 +55,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 				setUser({
 					name: user.displayName,
 					email: user.email,
-					photo: user.photoURL,
-					uid: user.uid,
+					picture: user.photoURL,
+					uid: user.providerData[0].uid,
 				});
 				nookies.set(undefined, 'token', token, { path: '/' });
 			}
