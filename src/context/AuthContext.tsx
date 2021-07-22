@@ -1,5 +1,5 @@
-import { createContext, ReactNode, useEffect, useState } from 'react';
 import nookies from 'nookies';
+import { createContext, ReactNode, useEffect, useState } from 'react';
 
 import { firebase, auth } from 'src/services/firebase/config';
 
@@ -19,6 +19,8 @@ type AuthContextValue = {
 	user: User | null;
 };
 
+const REFRESH_TOKEN_INTERVAL = 10 * 60 * 1000;
+
 export const AuthContext = createContext({} as AuthContextValue);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
@@ -31,8 +33,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			const result = await auth.signInWithPopup(provider);
 
 			const { user } = result;
-
-			console.log(user.uid);
 
 			setUser({
 				name: user.displayName,
@@ -47,10 +47,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
 	useEffect(() => {
 		const unsubscribe = auth.onIdTokenChanged(async user => {
-			if (!user) {
-				setUser(null);
-				nookies.set(undefined, 'token', '', { path: '/' });
-			} else {
+			if (user) {
 				const token = await user.getIdToken();
 				setUser({
 					name: user.displayName,
@@ -59,6 +56,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 					uid: user.providerData[0].uid,
 				});
 				nookies.set(undefined, 'token', token, { path: '/' });
+			} else {
+				setUser(null);
+				nookies.set(undefined, 'token', '', { path: '/' });
 			}
 		});
 
@@ -69,10 +69,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		const interval = setInterval(async () => {
 			const user = firebase.auth().currentUser;
 
-			if (user) {
-				await user.getIdToken(true);
-			}
-		}, 10 * 60 * 1000);
+			if (user) await user.getIdToken(true);
+		}, REFRESH_TOKEN_INTERVAL);
 
 		return () => clearInterval(interval);
 	}, []);
