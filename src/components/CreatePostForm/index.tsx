@@ -1,10 +1,14 @@
-import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import * as S from './styles';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
+import { v4 as generateUniqueId } from 'uuid';
 import TextareaAutosize from 'react-textarea-autosize';
 import { useAuth } from 'src/hooks/useAuth';
+import { Button } from '@components/Button';
+import { useMutation } from 'react-query';
+import { createPost } from 'src/api';
+import { PostType } from 'src/types/Post';
 
 type FormData = {
 	content: string;
@@ -24,15 +28,21 @@ export default function CreatePostForm({ onUiUpdate }: CreatePostFormProps) {
 
 	const { user } = useAuth();
 
+	const mutation = useMutation((newPost: PostType) => createPost(newPost));
+
 	async function handleCreatePost(data: FormData) {
 		await toast.promise(
-			axios.post('/api/posts', {
+			mutation.mutateAsync({
 				author: {
 					name: user.name,
 					picture: user.picture,
 					githubId: user.uid,
 				},
 				content: data.content,
+				createdAt: new Date().toISOString(),
+				likes: 0,
+				dislikes: 0,
+				id: generateUniqueId(),
 			}),
 			{
 				loading: 'Postando...',
@@ -72,7 +82,7 @@ export default function CreatePostForm({ onUiUpdate }: CreatePostFormProps) {
 
 			<hr />
 
-			<button type='submit'>Postar</button>
+			<Button type='submit'>Postar</Button>
 		</S.Form>
 	);
 }
