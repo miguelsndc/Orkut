@@ -1,5 +1,6 @@
 import nookies from 'nookies';
 import { createContext, ReactNode, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { firebase, auth } from 'src/services/firebase/config';
 
@@ -17,6 +18,7 @@ type User = {
 type AuthContextValue = {
 	loginWithGithub(): Promise<void>;
 	user: User | null;
+	logout: () => Promise<void>;
 };
 
 const REFRESH_TOKEN_INTERVAL = 10 * 60 * 1000;
@@ -25,6 +27,10 @@ export const AuthContext = createContext({} as AuthContextValue);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const [user, setUser] = useState<User | null>(null);
+
+	async function logout() {
+		return await auth.signOut();
+	}
 
 	async function loginWithGithub() {
 		const provider = new firebase.auth.GithubAuthProvider();
@@ -41,7 +47,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 				uid: user.uid,
 			});
 		} catch (error) {
-			console.log(error);
+			toast.error('Não foi possível fazer o login, tente novamente');
+			return;
 		}
 	}
 
@@ -76,7 +83,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	}, []);
 
 	return (
-		<AuthContext.Provider value={{ loginWithGithub, user }}>
+		<AuthContext.Provider value={{ loginWithGithub, user, logout }}>
 			{children}
 		</AuthContext.Provider>
 	);
