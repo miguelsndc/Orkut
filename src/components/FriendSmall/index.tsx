@@ -9,7 +9,7 @@ type ProfileProps = {
 
 export default function FriendSmall({ name, imageURL }: ProfileProps) {
 	return (
-		<Link href={`/friends/${name}`}>
+		<Link href={`/users/${name}`}>
 			<S.Wrapper>
 				<Image
 					src={imageURL}
