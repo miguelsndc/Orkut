@@ -48,15 +48,15 @@ export default function Menu() {
 						<IoLogOutOutline size='1.65rem' onClick={handleLogout} />
 					</div>
 				</nav>
-				<button onClick={() => setIsMenuOpen(!isMenuOpen)}>
-					{isMenuOpen && (
-						<img src={`${BASE_URL}/icons/menu-open.svg?v=${VERSION}`} />
-					)}
-					{!isMenuOpen && (
-						<img src={`${BASE_URL}/icons/menu-closed.svg?v=${VERSION}`} />
-					)}
-				</button>
 			</div>
+			<footer className='bottom-nav'>
+				<Link href='/'>
+					<AiOutlineHome />
+				</Link>
+				<Link href='/followers'>
+					<AiOutlineTeam />
+				</Link>
+			</footer>
 		</S.Wrapper>
 	);
 }
