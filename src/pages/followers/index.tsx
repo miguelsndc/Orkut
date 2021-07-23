@@ -3,31 +3,40 @@ import Head from 'next/head';
 import ProfileSidebar from '@components/ProfileSidebar';
 import nookies from 'nookies';
 import { Follower } from 'src/types/Follower';
-import api from 'src/services/api';
 import Image from 'next/image';
 import * as S from '@styles/pages/FriendList';
 import Link from 'next/link';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { firebaseAdmin } from 'src/services/firebase/adminConfig';
-import { User } from 'src/pages';
 import Menu from '@components/Menu';
+import { useQuery } from 'react-query';
+import { getFollowers } from 'src/api';
+import { User } from 'src/types/User';
 
-type FriendListProps = {
+type FollowerListProps = {
 	followers: Follower[];
 	user: User;
 };
 
-export default function FriendList({ followers, user }: FriendListProps) {
+export default function FollowerList({ followers, user }: FollowerListProps) {
+	const { data } = useQuery(
+		'followers',
+		async () => {
+			const { data } = await getFollowers(user.uid);
+			return data;
+		},
+		{
+			initialData: followers,
+		}
+	);
+
 	return (
 		<>
 			<Head>
-				<title>Seguidores | Orkut</title>
+				<title>Seguidores | Alurakut</title>
 			</Head>
-			<Menu githubUser={'miguelsndc'} />
+			<Menu />
 			<S.Container>
-				<div className='profile'>
-					<ProfileSidebar user={user} />
-				</div>
 				<Box>
 					<h2 className='title'>Meus Seguidores</h2>
 					<div className='path'>
@@ -35,8 +44,8 @@ export default function FriendList({ followers, user }: FriendListProps) {
 					</div>
 					<S.Table>
 						<tbody>
-							{followers.length > 0 &&
-								followers.map(follower => {
+							{data.length > 0 &&
+								data.map(follower => {
 									return (
 										<tr key={follower.id}>
 											<Image
@@ -47,7 +56,7 @@ export default function FriendList({ followers, user }: FriendListProps) {
 												blurDataURL={follower.avatar_url}
 											/>
 											<div>
-												<Link href={`/friends/${follower.login}`}>
+												<Link href={`/users/${follower.id}`}>
 													<h3>{follower.login}</h3>
 												</Link>
 												<span>{follower.html_url}</span>
@@ -82,14 +91,11 @@ export const getServerSideProps: GetServerSideProps = async (
 
 	const githubUserId = token.firebase.identities['github.com'][0];
 
-	const { data } = await api.get<Follower[]>(
-		`/user/${githubUserId}/followers`,
-		{
-			headers: {
-				Authorization: `token ${process.env.GITHUB_ACESS_TOKEN}`,
-			},
-		}
-	);
+	const { data } = await getFollowers(githubUserId, {
+		headers: {
+			Authorization: `token ${process.env.GITHUB_ACESS_TOKEN}`,
+		},
+	});
 
 	return {
 		props: {
