@@ -1,24 +1,34 @@
 import { useState } from 'react';
+import Image from 'next/image';
 
 import * as S from './styles';
 
 import Link from 'next/link';
-import { IoSearchOutline } from 'react-icons/io5';
+import { IoLogOutOutline } from 'react-icons/io5';
+import { useAuth } from 'src/hooks/useAuth';
+import { useRouter } from 'next/router';
+
+import { AiOutlineHome, AiOutlineTeam } from 'react-icons/ai';
 
 const MenuOptions = [
 	{ name: 'Inicio', slug: '/' },
-	{ name: 'Amigos', slug: '/friends/all' },
-	{ name: 'Comunidades', slug: '/communities/all' },
+	{ name: 'Amigos', slug: '/followers' },
+	{ name: 'Comunidades', slug: '/communities' },
 ];
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-const VERSION = process.env.NEXT_PUBLIC_VERSION;
 
-export default function Menu({ githubUser }) {
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
+export default function Menu() {
+	const { user, logout } = useAuth();
+	const router = useRouter();
+
+	async function handleLogout() {
+		await logout();
+		router.push('/login');
+	}
 
 	return (
-		<S.Wrapper isMenuOpen={isMenuOpen}>
+		<S.Wrapper>
 			<div className='container'>
 				<S.Logo src={`${BASE_URL}/logo.svg`} />
 
@@ -33,12 +43,9 @@ export default function Menu({ githubUser }) {
 					))}
 				</nav>
 				<nav>
-					<div className='search'>
-						<IoSearchOutline />
-						<input
-							placeholder='Pesquisar no Orkut'
-							aria-label='Pesquisar no Orkut'
-						/>
+					<div className='profile'>
+						{user && <Image src={user.picture} width={128} height={128} />}
+						<IoLogOutOutline size='1.65rem' onClick={handleLogout} />
 					</div>
 				</nav>
 				<button onClick={() => setIsMenuOpen(!isMenuOpen)}>
