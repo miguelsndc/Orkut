@@ -7,14 +7,12 @@
     "start": "next start"
   },
   "dependencies": {
-    "@apollo/client": "^3.3.21",
     "@types/styled-components": "^5.1.11",
+    "@types/uuid": "^8.3.1",
     "axios": "^0.21.1",
     "date-fns": "^2.22.1",
-    "datocms-client": "^3.4.11",
     "firebase": "^8.7.1",
     "firebase-admin": "^9.11.0",
-    "graphql": "^15.5.1",
     "lint-staged": "^11.0.0",
     "next": "latest",
     "nookies": "^2.5.2",
@@ -26,8 +24,10 @@
     "react-hot-toast": "^2.0.0",
     "react-icons": "^4.2.0",
     "react-is": "^17.0.2",
+    "react-query": "^3.19.0",
     "react-textarea-autosize": "^8.3.3",
-    "styled-components": "^5.2.3"
+    "styled-components": "^5.2.3",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
