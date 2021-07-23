@@ -9,19 +9,19 @@ const MainGrid = styled.main`
 	margin: 0 auto;
 	padding: 1rem;
 
-	.profileArea {
+	.communityArea {
 		display: none;
-
-		@media (min-width: 860px) {
-			display: block;
-		}
 	}
 
 	@media (min-width: 860px) {
+		.communityArea {
+			display: block;
+		}
+
 		display: grid;
 		max-width: 1100px;
-		grid-template-areas: 'profileArea welcomeArea profileRelationsArea';
-		grid-template-columns: 160px 1fr 230px;
+		grid-template-areas: 'communityArea welcomeArea profileRelationsArea';
+		grid-template-columns: 230px 1fr 230px;
 	}
 `;
 
