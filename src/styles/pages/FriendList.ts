@@ -8,22 +8,26 @@ export const Container = styled.main`
 	max-width: 500px;
 	align-items: start;
 
-	.profile {
-		display: none;
-	}
-
-	grid-template-columns: 1fr;
-
 	@media (min-width: 860px) {
-		max-width: 1100px;
-		grid-template-columns: 160px 1fr;
-
-		.profile {
-			display: block;
-		}
+		max-width: 1000px;
 	}
 
 	.path {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+
+		button {
+			max-width: 200px;
+		}
+
+		@media (min-width: 860px) {
+			gap: 0;
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+		}
+
 		a {
 			color: ${({ theme }) => theme.primaryElement};
 			text-decoration: none;
@@ -60,7 +64,7 @@ export const Table = styled.table`
 		}
 
 		span {
-			display: none;
+			display: block;
 			font-size: 0.875rem;
 		}
 
@@ -78,10 +82,6 @@ export const Table = styled.table`
 	@media (min-width: 500px) {
 		tbody tr {
 			gap: 2rem;
-
-			span {
-				display: block;
-			}
 		}
 	}
 
