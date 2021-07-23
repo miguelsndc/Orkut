@@ -3,58 +3,25 @@ import Image from 'next/image';
 
 import * as S from './styles';
 
-import {
-	IoPersonOutline,
-	IoBookOutline,
-	IoCameraOutline,
-	IoTrendingUpOutline,
-	IoLogOutOutline,
-	IoChatbubbleEllipsesOutline,
-} from 'react-icons/io5';
+import { IoPersonOutline, IoLogOutOutline } from 'react-icons/io5';
 
-import { User } from 'src/pages';
+import { User } from 'src/types/User';
+import { useAuth } from 'src/hooks/useAuth';
+import { useRouter } from 'next/router';
 
 type ProfileSidebarProps = {
 	user: User;
 };
 
-function ProfileSidebarMenuDefault() {
-	return (
-		<S.Wrapper>
-			<nav>
-				<a href='/'>
-					<IoPersonOutline />
-					Perfil
-				</a>
-				<a href='/'>
-					<IoBookOutline />
-					Recados
-				</a>
-				<a href='/'>
-					<IoCameraOutline />
-					Fotos
-				</a>
-				<a href='/'>
-					<IoChatbubbleEllipsesOutline />
-					Depoimentos
-				</a>
-			</nav>
-			<hr />
-			<nav>
-				<a href='/'>
-					<IoTrendingUpOutline />
-					GitHub Trends
-				</a>
-				<a href='/logout'>
-					<IoLogOutOutline />
-					Sair
-				</a>
-			</nav>
-		</S.Wrapper>
-	);
-}
-
 export default function ProfileSidebar({ user }: ProfileSidebarProps) {
+	const { logout } = useAuth();
+	const router = useRouter();
+
+	async function handleLogout() {
+		await logout();
+		router.push('/login');
+	}
+
 	return (
 		<Box>
 			<div>
@@ -72,12 +39,26 @@ export default function ProfileSidebar({ user }: ProfileSidebarProps) {
 					<hr />
 
 					<h2 className='profile-name'>
-						<a href={`/user/${user.uid}`}>@{user.name}</a>
+						<a href={`/users/${user.uid}`}>@{user.name}</a>
 					</h2>
 
 					<hr />
 
-					<ProfileSidebarMenuDefault />
+					<S.Wrapper>
+						<nav>
+							<a href='/users/'>
+								<IoPersonOutline />
+								Perfil
+							</a>
+						</nav>
+						<hr />
+						<nav>
+							<a onClick={handleLogout}>
+								<IoLogOutOutline />
+								Sair
+							</a>
+						</nav>
+					</S.Wrapper>
 				</div>
 			</div>
 		</Box>
