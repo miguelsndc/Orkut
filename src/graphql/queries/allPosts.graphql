@@ -1,8 +1,0 @@
-query {
-	allPosts {
-		id
-		createdAt
-		content
-		author
-	}
-}

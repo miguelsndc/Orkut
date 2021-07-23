@@ -2,9 +2,16 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
+import { v4 as generateUniqueId } from 'uuid';
+
 import * as S from './styles';
 import { useDropzone } from 'react-dropzone';
 import { useAuth } from 'src/hooks/useAuth';
+import { Button } from '@components/Button';
+import { storage } from 'src/services/firebase/config';
+import { useMutation } from 'react-query';
+import { Community } from 'src/types/Community';
+import { createCommunity } from 'src/api';
 
 type FormData = {
 	name: string;
@@ -27,38 +34,59 @@ export default function CreateCommunityForm() {
 			accept: allowedTypes.join(', '),
 		});
 
+	const mutation = useMutation((newCommunity: Community) =>
+		createCommunity(newCommunity)
+	);
+
+	async function upload(file: File): Promise<string> {
+		const storageRef = storage.ref();
+		const fileRef = storageRef.child(`${Date.now()}${file.name}`);
+
+		return new Promise((resolve, reject) => {
+			const unsubscribe = fileRef.put(file).on(
+				'state_changed',
+				() => {},
+				error => {
+					toast.error('Houve um erro ao criar sua comunidade');
+					reject(error);
+				},
+				async () => {
+					const url = await fileRef.getDownloadURL();
+					unsubscribe();
+					resolve(url);
+				}
+			);
+		});
+	}
+
 	async function handleCreateCommunity(data: FormData) {
 		const { name } = data;
 		const file = acceptedFiles[0];
 
 		if (!file || !allowedTypes.includes(file.type)) return;
 
-		const path = 'path to file';
+		const createCommunityProcess = new Promise(resolve => {
+			upload(file).then(url => {
+				mutation
+					.mutateAsync({
+						id: generateUniqueId(),
+						title: name,
+						poster: url,
+						author: {
+							name: user.name,
+							picture: user.picture,
+							githubId: user.uid,
+						},
+					})
+					.then(docRef => resolve(docRef));
+			});
+		});
 
-		toast.promise(
-			axios.post(
-				'/api/communities/',
-				{
-					title: name,
-					poster: path,
-					author: {
-						name: user.name,
-						picture: user.picture,
-						githubId: user.uid,
-					},
-				},
-				{
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				}
-			),
-			{
-				loading: 'Criando Comunidade...',
-				success: <b>Comunidade Criada com Sucesso!</b>,
-				error: <b>Houve um erro ao criar a comunidade</b>,
-			}
-		);
+		toast.promise(createCommunityProcess, {
+			loading: 'Criando Comunidade...',
+			success: <b>Comunidade Criada com Sucesso!</b>,
+			error: <b>Houve um erro ao criar a comunidade</b>,
+		});
 	}
 
 	const AcceptedFileItems = acceptedFiles.map(file => {
@@ -85,11 +113,11 @@ export default function CreateCommunityForm() {
 					<input {...getInputProps()} />
 					<h3>Arraste e solte uma Imagem</h3>
 					<div className='separator'>OU</div>
-					<button>Abrir Arquivos</button>
+					<Button>Abrir Arquivos</Button>
 				</S.Dropzone>
 				<div className='preview'>{AcceptedFileItems}</div>
 			</div>
-			<button type='submit'>Criar comunidade</button>
+			<Button type='submit'>Criar comunidade</Button>
 		</S.Form>
 	);
 }
