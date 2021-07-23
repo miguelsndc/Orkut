@@ -42,8 +42,31 @@ export const Container = styled.div`
 	.options {
 		margin-top: 0.75rem;
 		display: flex;
-		justify-content: flex-end;
-		padding: 0 5%;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 3%;
+
+		.wrapper {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+		}
+
+		.likes,
+		.dislikes {
+			border: none;
+			background: none;
+			cursor: pointer;
+
+			display: flex;
+			align-items: center;
+
+			span {
+				margin-left: 4px;
+				font-weight: 500;
+				font-size: 0.875rem;
+			}
+		}
 
 		a {
 			color: ${({ theme }) => theme.primaryElement};
