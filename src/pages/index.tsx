@@ -11,79 +11,63 @@ import Box from '@components/Box';
 import Link from 'next/link';
 
 import { Follower } from 'src/types/Follower';
-import QUERY_ALL_COMMUNITIES from 'src/graphql/queries/allCommunities.graphql';
-import QUERY_ALL_POSTS from 'src/graphql/queries/allPosts.graphql';
 
 import * as S from '@styles/pages/Home';
-import api from 'src/services/api';
-import { useQuery } from '@apollo/client';
 import CreatePostForm from '@components/CreatePostForm';
 import Post from '@components/Post';
 import FriendSmall from '@components/FriendSmall';
 import Spinner from '@components/Spinner';
-import { useAuth } from 'src/hooks/useAuth';
-import {
-	GetServerSideProps,
-	GetServerSidePropsContext,
-	InferGetServerSidePropsType,
-} from 'next';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { firebaseAdmin } from 'src/services/firebase/adminConfig';
-import client from 'src/config/apolloClient';
 import Menu from '@components/Menu';
-
-export type Author = {
-	name: string;
-	picture: string;
-	githubId: string;
-};
-
-export type PostType = {
-	id: string;
-	content: string;
-	author: Author;
-	createdAt: string;
-};
-
-type QueryPosts = {
-	allPosts: PostType[];
-};
-
-export type User = {
-	name: any;
-	picture: string;
-	email: string;
-	uid: any;
-};
+import { useQuery } from 'react-query';
+import { getCommunities, getFollowers, getPosts } from 'src/api';
+import { Community } from 'src/types/Community';
+import { User } from 'src/types/User';
 
 type HomeProps = {
-	communities: any[];
+	communities: Community[];
 	followers: Follower[];
 	user: User;
 };
 
 export default function Home({ communities, followers, user }: HomeProps) {
-	const { data, error, loading, refetch } =
-		useQuery<QueryPosts>(QUERY_ALL_POSTS);
+	const { data, isLoading, refetch } = useQuery('posts', getPosts);
 
 	return (
 		<>
 			<Head>
-				<title>Orkut | Home</title>
+				<title>Alurakut | Home</title>
 			</Head>
-			<Menu githubUser={'miguelsndc'} />
+			<Menu />
 			<MainGrid>
-				<S.GridItem className='profileArea' gridArea='profileArea'>
-					<ProfileSidebar user={user} />
+				<S.GridItem gridArea='communityArea' className='communityArea'>
+					<Box>
+						<h2 className='smallTitle'>
+							Comunidades <span>({communities.length})</span>
+						</h2>
+						<S.ProfileRelationsWrapper>
+							{communities.slice(0, 6).map(community => (
+								<CommunitySmall
+									key={community.id}
+									name={community.title}
+									imageURL={community.poster}
+								/>
+							))}
+							<hr />
+							<Link href='/communities'>Ver Todas</Link>
+						</S.ProfileRelationsWrapper>
+					</Box>
 				</S.GridItem>
 				<S.GridItem className='welcomeArea' gridArea='welcomeArea'>
 					<Box>
 						<CreatePostForm onUiUpdate={() => refetch()} />
 					</Box>
 
-					{loading ? (
+					{isLoading ? (
 						<Spinner />
 					) : (
-						data.allPosts.map(post => <Post post={post} key={post.id} />)
+						data.map(post => <Post post={post} key={post.id} />)
 					)}
 				</S.GridItem>
 				<S.GridItem
@@ -92,7 +76,7 @@ export default function Home({ communities, followers, user }: HomeProps) {
 				>
 					<Box>
 						<h2 className='smallTitle'>
-							Meus Amigos <span>({followers.length})</span>
+							Meus Seguidores <span>({followers.length})</span>
 						</h2>
 						<S.ProfileRelationsWrapper>
 							{followers.slice(0, 6).map(follower => (
@@ -103,23 +87,7 @@ export default function Home({ communities, followers, user }: HomeProps) {
 								/>
 							))}
 							<hr />
-							<Link href='/friends/all'>Ver Todos</Link>
-						</S.ProfileRelationsWrapper>
-					</Box>
-					<Box>
-						<h2 className='smallTitle'>
-							Comunidades <span>({communities.length})</span>
-						</h2>
-						<S.ProfileRelationsWrapper>
-							{communities.slice(0, 6).map(community => (
-								<CommunitySmall
-									key={community.id}
-									name={community.title}
-									imageURL={community.poster.url}
-								/>
-							))}
-							<hr />
-							<Link href='/communities/all'>Ver Todas</Link>
+							<Link href='/followers'>Ver Todos</Link>
 						</S.ProfileRelationsWrapper>
 					</Box>
 				</S.GridItem>
@@ -152,22 +120,13 @@ export const getServerSideProps: GetServerSideProps = async (
 
 	const githubUserId = token.firebase.identities['github.com'][0];
 
-	const communities = await client.query({
-		query: QUERY_ALL_COMMUNITIES,
-	});
+	const communities = await getCommunities();
 
-	const followersResponse = await api.get<Follower[]>(
-		`/user/${githubUserId}/followers`,
-		{
-			headers: {
-				Authorization: `token ${process.env.GITHUB_ACESS_TOKEN}`,
-			},
-		}
-	);
+	const followersResponse = await getFollowers(githubUserId);
 
 	return {
 		props: {
-			communities: communities.data.allCommunities,
+			communities,
 			followers: followersResponse.data,
 			user: {
 				name: token.name,
