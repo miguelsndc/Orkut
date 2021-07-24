@@ -44,7 +44,6 @@ export const Container = styled.div`
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 0 3%;
 
 		.wrapper {
 			display: flex;
@@ -62,9 +61,8 @@ export const Container = styled.div`
 			align-items: center;
 
 			span {
-				margin-left: 4px;
+				margin-left: 3px;
 				font-weight: 500;
-				font-size: 0.875rem;
 			}
 		}
 
