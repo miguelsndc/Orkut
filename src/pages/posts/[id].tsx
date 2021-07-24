@@ -1,8 +1,32 @@
-import { useRouter } from 'next/dist/client/router';
+import Menu from '@components/Menu';
+import Post from '@components/Post';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import Head from 'next/head';
+import { getPost } from 'src/api';
+import { PostType } from 'src/types/Post';
 
-export default function PostDetails() {
-	const router = useRouter();
-	const { id } = router.query;
+type PostDetailsProps = PostType;
 
-	return <div>PÁGINA EM CONSTRUÇÃO</div>;
+export default function PostDetails(post: PostDetailsProps) {
+	return (
+		<>
+			<Head>
+				<title>Alurakut | {post.content.substr(0, 30)}</title>
+			</Head>
+			<Menu />
+			<Post post={post} />
+		</>
+	);
 }
+
+export const getServerSideProps: GetServerSideProps = async (
+	ctx: GetServerSidePropsContext
+) => {
+	const { id } = ctx.params;
+
+	const data = await getPost(id);
+
+	return {
+		props: data,
+	};
+};
