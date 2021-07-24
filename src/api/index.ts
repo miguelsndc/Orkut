@@ -13,9 +13,18 @@ export const getPosts = (): Promise<PostType[]> =>
 	new Promise(resolve => {
 		firestore
 			.collection('posts')
+			.orderBy('createdAt', 'desc')
 			.get()
 			.then(querySnapshot => {
-				const documents = querySnapshot.docs.map(doc => doc.data() as PostType);
+				const documents = querySnapshot.docs.map(doc => {
+					const docData = doc.data() as PostType;
+
+					if (docData.createdAt instanceof firebase.firestore.Timestamp)
+						return {
+							...docData,
+							createdAt: docData.createdAt.toDate().toISOString(),
+						};
+				});
 				resolve(documents);
 			});
 	});
@@ -83,4 +92,31 @@ export const dislike = async (postId: string) =>
 			})
 			.then(() => resolve('Document updated successfully'))
 			.catch(error => reject(error));
+	});
+
+export const getPost = (postId: string | string[]): Promise<PostType> =>
+	new Promise((resolve, reject) => {
+		if (typeof postId === 'string')
+			firestore
+				.collection('posts')
+				.doc(postId)
+				.get()
+				.then(querySnapshot => {
+					const data = querySnapshot.data() as PostType;
+
+					if (data.createdAt instanceof firebase.firestore.Timestamp) {
+						const converted: PostType = {
+							...data,
+							createdAt: data.createdAt.toDate().toISOString(),
+						};
+
+						resolve(converted);
+					}
+
+					reject(data);
+				})
+				.catch(error => reject(error));
+		else {
+			reject('Could not perform this operation');
+		}
 	});
