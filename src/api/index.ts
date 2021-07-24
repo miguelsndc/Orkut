@@ -20,14 +20,14 @@ export const getPosts = (): Promise<PostType[]> =>
 			});
 	});
 
-export const createPost = (newPost: PostType): Promise<DocRef> =>
-	new Promise(resolve => {
+export const createPost = (newPost: PostType): Promise<void> =>
+	new Promise((resolve, reject) => {
 		firestore
 			.collection('posts')
-			.add(newPost)
-			.then(ref => {
-				resolve(ref);
-			});
+			.doc(newPost.id)
+			.set(newPost)
+			.then(() => resolve())
+			.catch(error => reject(error));
 	});
 
 export const getFollowers = async (
