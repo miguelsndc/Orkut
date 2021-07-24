@@ -70,8 +70,9 @@ export const Table = styled.table`
 
 		img {
 			border-radius: 50%;
-			min-width: 64px;
-			height: 64px;
+			min-width: 56px;
+			background: ${({ theme }) => theme.gray4};
+			height: 56px;
 		}
 
 		&:nth-child(odd) {

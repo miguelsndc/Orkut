@@ -61,13 +61,7 @@ export default function Post({ post }: PostProps) {
 		<Container>
 			<Box>
 				<div className='author'>
-					<Image
-						src={post.author.picture}
-						placeholder='blur'
-						blurDataURL={post.author.picture}
-						width={128}
-						height={128}
-					/>
+					<Image src={post.author.picture} width={128} height={128} />
 					<div>
 						<h4>{post.author.name}</h4>
 						<span>{formattedDate}</span>

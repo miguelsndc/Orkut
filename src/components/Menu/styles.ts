@@ -111,7 +111,7 @@ export const Wrapper = styled.header`
 				border-radius: 50%;
 				width: 36px;
 				height: 36px;
-
+				background: ${({ theme }) => theme.gray4};
 				cursor: pointer;
 
 				&:hover {

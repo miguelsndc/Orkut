@@ -12,13 +12,7 @@ export default function CommunitySmall({ name, imageURL }: ProfileProps) {
 	return (
 		<Link href={`/communities/${name}`}>
 			<S.Wrapper>
-				<Image
-					src={imageURL}
-					width={192}
-					height={192}
-					placeholder='blur'
-					blurDataURL={imageURL}
-				/>
+				<Image src={imageURL} width={192} height={192} />
 				<span>{name}</span>
 			</S.Wrapper>
 		</Link>

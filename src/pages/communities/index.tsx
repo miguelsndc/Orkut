@@ -32,7 +32,6 @@ export default function AllCommunities({
 					<h2 className='title'>Comunidades</h2>
 					<div className='path'>
 						<span>
-							{' '}
 							<Link href='/'>Início </Link> {'>'} Comunidades
 						</span>
 						<Link href='/communities/new'>
@@ -44,13 +43,7 @@ export default function AllCommunities({
 						<tbody>
 							{allCommunities.map(community => (
 								<tr key={community.id}>
-									<Image
-										src={community.poster}
-										width={184}
-										height={184}
-										placeholder='blur'
-										blurDataURL={community.poster}
-									/>
+									<Image src={community.poster} width={184} height={184} />
 									<div>
 										<h3>{community.title}</h3>
 										<span>@{community.author.name}</span>

@@ -37,5 +37,6 @@ export const Wrapper = styled.li`
 		width: 40px;
 		height: 40px;
 		border-radius: 50%;
+		background: ${({ theme }) => theme.gray4};
 	}
 `;

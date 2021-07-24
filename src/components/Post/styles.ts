@@ -18,7 +18,7 @@ export const Container = styled.div`
 		img {
 			width: 32px;
 			height: 32px;
-
+			background: ${({ theme }) => theme.gray4};
 			border-radius: 50%;
 		}
 

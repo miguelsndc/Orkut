@@ -11,13 +11,7 @@ export default function FriendSmall({ name, imageURL }: ProfileProps) {
 	return (
 		<Link href={`/users/${name}`}>
 			<S.Wrapper>
-				<Image
-					src={imageURL}
-					width={192}
-					height={192}
-					placeholder='blur'
-					blurDataURL={imageURL}
-				/>
+				<Image src={imageURL} width={192} height={192} />
 				<span>{name}</span>
 			</S.Wrapper>
 		</Link>

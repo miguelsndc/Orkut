@@ -24,5 +24,6 @@ export const Wrapper = styled.li`
 		width: 50px;
 		height: 50px;
 		border-radius: 10px;
+		background: ${({ theme }) => theme.gray4};
 	}
 `;
