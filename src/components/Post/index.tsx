@@ -2,32 +2,19 @@ import Box from '@components/Box';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Container } from './styles';
-import { IoThumbsDownSharp, IoThumbsUpSharp } from 'react-icons/io5';
-
+import { AiOutlineDislike, AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { parseISO, format } from 'date-fns';
 import PTBR from 'date-fns/locale/pt-BR';
 import { useState } from 'react';
-
-type Author = {
-	name: string;
-	picture: string;
-	githubId: string;
-};
-
-type Post = {
-	id: string;
-	content: string;
-	author: Author;
-	createdAt: string;
-	likes: number;
-	dislikes: number;
-};
+import { PostType } from 'src/types/Post';
 
 type PostProps = {
-	post: Post;
+	post: PostType;
 };
+
 export default function Post({ post }: PostProps) {
-	const createdAt = parseISO(post.createdAt);
+	const createdAt = parseISO(String(post.createdAt));
+
 	const formattedDate = format(createdAt, "dd 'de' MMMM', às ' HH:mm'h'", {
 		locale: PTBR,
 	});
@@ -73,11 +60,15 @@ export default function Post({ post }: PostProps) {
 				<div className='options'>
 					<div className='wrapper'>
 						<button className='likes' onClick={handleLike}>
-							<IoThumbsUpSharp />
+							{hasLiked ? (
+								<AiFillHeart size='1.4rem' color='#e0281b' />
+							) : (
+								<AiOutlineHeart size='1.4rem' />
+							)}
 							<span>{likes}</span>
 						</button>
 						<button className='dislikes' onClick={handleDislike}>
-							<IoThumbsDownSharp />
+							<AiOutlineDislike size='1.4rem' />
 							<span>{dislikes}</span>
 						</button>
 					</div>
