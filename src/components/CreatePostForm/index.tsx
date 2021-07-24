@@ -4,6 +4,7 @@ import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { v4 as generateUniqueId } from 'uuid';
 import TextareaAutosize from 'react-textarea-autosize';
+import { firebase } from 'src/services/firebase/config';
 import { useAuth } from 'src/hooks/useAuth';
 import { Button } from '@components/Button';
 import { useMutation } from 'react-query';
@@ -33,16 +34,16 @@ export default function CreatePostForm({ onUiUpdate }: CreatePostFormProps) {
 	async function handleCreatePost(data: FormData) {
 		await toast.promise(
 			mutation.mutateAsync({
+				id: generateUniqueId(),
+				createdAt: firebase.firestore.FieldValue.serverTimestamp(),
 				author: {
 					name: user.name,
 					picture: user.picture,
 					githubId: user.uid,
 				},
 				content: data.content,
-				createdAt: new Date().toISOString(),
 				likes: 0,
 				dislikes: 0,
-				id: generateUniqueId(),
 			}),
 			{
 				loading: 'Postando...',
