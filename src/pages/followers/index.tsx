@@ -40,7 +40,9 @@ export default function FollowerList({ followers, user }: FollowerListProps) {
 				<Box>
 					<h2 className='title'>Meus Seguidores</h2>
 					<div className='path'>
-						<a href='/'>Início </a> {'>'} Meus Seguidores
+						<span>
+							<a href='/'>Início </a> {'>'} Meus Seguidores
+						</span>
 					</div>
 					<S.Table>
 						<tbody>
@@ -52,8 +54,6 @@ export default function FollowerList({ followers, user }: FollowerListProps) {
 												src={follower.avatar_url}
 												width={184}
 												height={184}
-												placeholder='blur'
-												blurDataURL={follower.avatar_url}
 											/>
 											<div>
 												<Link href={`/users/${follower.id}`}>
