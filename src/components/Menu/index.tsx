@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Image from 'next/image';
 
 import * as S from './styles';
@@ -7,8 +6,6 @@ import Link from 'next/link';
 import { IoLogOutOutline } from 'react-icons/io5';
 import { useAuth } from 'src/hooks/useAuth';
 import { useRouter } from 'next/router';
-
-import { AiOutlineHome, AiOutlineTeam } from 'react-icons/ai';
 
 const MenuOptions = [
 	{ name: 'Inicio', slug: '/' },
@@ -49,14 +46,6 @@ export default function Menu() {
 					</div>
 				</nav>
 			</div>
-			<footer className='bottom-nav'>
-				<Link href='/'>
-					<AiOutlineHome />
-				</Link>
-				<Link href='/followers'>
-					<AiOutlineTeam />
-				</Link>
-			</footer>
 		</S.Wrapper>
 	);
 }
