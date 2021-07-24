@@ -60,3 +60,27 @@ export const createCommunity = (newCommunity: Community): Promise<DocRef> =>
 			.add(newCommunity)
 			.then(docRef => resolve(docRef));
 	});
+
+export const like = async (postId: string) =>
+	new Promise((resolve, reject) => {
+		firestore
+			.collection('posts')
+			.doc(postId)
+			.update({
+				like: 2,
+			})
+			.then(() => resolve('Document updated successfully'))
+			.catch(error => reject(error));
+	});
+
+export const dislike = async (postId: string) =>
+	new Promise((resolve, reject) => {
+		firestore
+			.collection('posts')
+			.doc(postId)
+			.update({
+				dislike: 2,
+			})
+			.then(() => resolve('Document updated successfully'))
+			.catch(error => reject(error));
+	});
