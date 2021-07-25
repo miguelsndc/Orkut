@@ -32,7 +32,7 @@ type HomeProps = {
 	user: User;
 };
 
-export default function Home({ communities, followers, user }: HomeProps) {
+export default function Home({ communities, followers }: HomeProps) {
 	const { data, isLoading, refetch } = useQuery('posts', getPosts);
 
 	return (
@@ -136,12 +136,6 @@ export const getServerSideProps: GetServerSideProps = async (
 		props: {
 			communities,
 			followers: data,
-			user: {
-				name: token.name,
-				picture: token.picture,
-				email: token.email,
-				uid: githubUserId,
-			},
 		},
 	};
 };
