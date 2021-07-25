@@ -43,7 +43,6 @@ export default function CreatePostForm({ onUiUpdate }: CreatePostFormProps) {
 				},
 				content: data.content,
 				likes: 0,
-				dislikes: 0,
 			}),
 			{
 				loading: 'Postando...',

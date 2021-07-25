@@ -11,5 +11,4 @@ export type PostType = {
 		| string
 		| Date;
 	likes: number;
-	dislikes: number;
 };
