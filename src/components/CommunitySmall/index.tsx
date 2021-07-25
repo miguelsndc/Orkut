@@ -9,11 +9,13 @@ type ProfileProps = {
 };
 
 export default function CommunitySmall({ name, imageURL }: ProfileProps) {
+	const title = name.length > 12 ? `${name.substr(0, 12).trim()}...` : name;
+
 	return (
 		<Link href={`/communities/${name}`}>
 			<S.Wrapper>
 				<Image src={imageURL} width={192} height={192} />
-				<span>{name}</span>
+				<span>{title}</span>
 			</S.Wrapper>
 		</Link>
 	);

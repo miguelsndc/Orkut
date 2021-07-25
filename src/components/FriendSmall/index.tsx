@@ -8,11 +8,13 @@ type ProfileProps = {
 };
 
 export default function FriendSmall({ name, imageURL }: ProfileProps) {
+	const userName = name.length > 12 ? `${name.substr(0, 12)}...` : name;
+
 	return (
 		<Link href={`/users/${name}`}>
 			<S.Wrapper>
 				<Image src={imageURL} width={192} height={192} />
-				<span>{name}</span>
+				<span>{userName}</span>
 			</S.Wrapper>
 		</Link>
 	);
