@@ -57,6 +57,7 @@ export const Table = styled.table`
 			font-weight: 500;
 			line-height: 1.4;
 			cursor: pointer;
+			font-size: 1rem;
 
 			&:hover {
 				text-decoration: underline;
@@ -64,7 +65,7 @@ export const Table = styled.table`
 		}
 
 		span {
-			display: block;
+			display: none;
 			font-size: 0.875rem;
 		}
 
@@ -83,6 +84,14 @@ export const Table = styled.table`
 	@media (min-width: 500px) {
 		tbody tr {
 			gap: 2rem;
+
+			h3 {
+				font-size: normal;
+			}
+
+			span {
+				display: block;
+			}
 		}
 	}
 
