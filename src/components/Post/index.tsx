@@ -2,14 +2,17 @@ import Box from '@components/Box';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Container } from './styles';
-import { AiOutlineDislike, AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
+import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { parseISO, format } from 'date-fns';
 import PTBR from 'date-fns/locale/pt-BR';
 import { useState } from 'react';
 import { PostType } from 'src/types/Post';
+import { useMutation } from 'react-query';
+import { togglelike } from 'src/api';
 
 type PostProps = {
 	post: PostType;
+	showDetails?: boolean;
 };
 
 export default function Post({ post }: PostProps) {
@@ -20,27 +23,30 @@ export default function Post({ post }: PostProps) {
 	});
 
 	const [likes, setLikes] = useState(post.likes);
-	const [dislikes, setDislikes] = useState(post.dislikes);
 	const [hasLiked, setHasLiked] = useState(false);
-	const [hasDisliked, setHasDisliked] = useState(false);
 
-	function handleLike() {
-		if (!hasLiked) {
-			setLikes(prevLikes => prevLikes + 1);
-			setHasLiked(true);
-		} else {
-			setLikes(prevLikes => prevLikes - 1);
+	const likeMutation = useMutation(
+		(data: { postId: string; currentLikes: number; hasLiked: boolean }) =>
+			togglelike(data.postId, data.currentLikes, data.hasLiked)
+	);
+
+	function handleToggleLike() {
+		if (hasLiked) {
+			setLikes(likes - 1);
 			setHasLiked(false);
-		}
-	}
-
-	function handleDislike() {
-		if (!hasDisliked) {
-			setDislikes(prevDislikes => prevDislikes + 1);
-			setHasDisliked(true);
+			likeMutation.mutate({
+				currentLikes: likes,
+				postId: post.id,
+				hasLiked: true,
+			});
 		} else {
-			setDislikes(prevDislikes => prevDislikes - 1);
-			setHasDisliked(false);
+			setHasLiked(true);
+			setLikes(likes + 1);
+			likeMutation.mutate({
+				currentLikes: likes,
+				postId: post.id,
+				hasLiked: false,
+			});
 		}
 	}
 
@@ -59,7 +65,7 @@ export default function Post({ post }: PostProps) {
 				<hr />
 				<div className='options'>
 					<div className='wrapper'>
-						<button className='likes' onClick={handleLike}>
+						<button className='likes' onClick={handleToggleLike}>
 							{hasLiked ? (
 								<AiFillHeart size='1.4rem' color='#e0281b' />
 							) : (
@@ -67,12 +73,8 @@ export default function Post({ post }: PostProps) {
 							)}
 							<span>{likes}</span>
 						</button>
-						<button className='dislikes' onClick={handleDislike}>
-							<AiOutlineDislike size='1.4rem' />
-							<span>{dislikes}</span>
-						</button>
 					</div>
-					<Link href={`/posts/${post.id}`}>Responder</Link>
+					<Link href={`/posts/${post.id}`}>Ver mais</Link>
 				</div>
 			</Box>
 		</Container>
