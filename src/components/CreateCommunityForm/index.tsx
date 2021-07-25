@@ -65,28 +65,29 @@ export default function CreateCommunityForm() {
 
 		if (!file || !allowedTypes.includes(file.type)) return;
 
-		const createCommunityProcess = new Promise(resolve => {
-			upload(file).then(url => {
-				mutation
-					.mutateAsync({
-						id: generateUniqueId(),
-						title: name,
-						poster: url,
-						author: {
-							name: user.name,
-							picture: user.picture,
-							githubId: user.uid,
-						},
-					})
-					.then(docRef => resolve(docRef));
-			});
-		});
-
-		toast.promise(createCommunityProcess, {
-			loading: 'Criando Comunidade...',
-			success: <b>Comunidade Criada com Sucesso!</b>,
-			error: <b>Houve um erro ao criar a comunidade</b>,
-		});
+		toast.promise(
+			new Promise(resolve => {
+				upload(file).then(url => {
+					mutation
+						.mutateAsync({
+							id: generateUniqueId(),
+							title: name,
+							poster: url,
+							author: {
+								name: user.name,
+								picture: user.picture,
+								githubId: user.uid,
+							},
+						})
+						.then(docRef => resolve(docRef));
+				});
+			}),
+			{
+				loading: 'Criando Comunidade...',
+				success: <b>Comunidade Criada com Sucesso!</b>,
+				error: <b>Houve um erro ao criar a comunidade</b>,
+			}
+		);
 	}
 
 	const AcceptedFileItems = acceptedFiles.map(file => {
