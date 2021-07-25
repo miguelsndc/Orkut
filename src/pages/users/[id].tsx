@@ -39,9 +39,11 @@ export const getServerSideProps: GetServerSideProps = async ({
 	const { id } = params;
 
 	try {
-		const response = await getUser(id);
-
-		console.log(response);
+		const response = await getUser(id, {
+			headers: {
+				Authorization: `token ${process.env.GITHUB_ACESS_TOKEN}`,
+			},
+		});
 
 		return {
 			props: {
