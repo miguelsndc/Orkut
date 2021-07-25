@@ -58,7 +58,7 @@ export const getFollowers = async (
 export const getUser = async (
 	id: string | string[],
 	config?: AxiosRequestConfig
-) => await api.get<GithubUser>(`/user/${id}`, config);
+) => await api.get<GithubUser>(`/users/${id}`, config);
 
 export const getCommunities = (): Promise<Community[]> =>
 	new Promise(resolve => {
@@ -81,25 +81,17 @@ export const createCommunity = (newCommunity: Community): Promise<DocRef> =>
 			.then(docRef => resolve(docRef));
 	});
 
-export const like = async (postId: string) =>
+export const togglelike = async (
+	postId: string,
+	currentLikes: number,
+	hasLiked: boolean
+) =>
 	new Promise((resolve, reject) => {
 		firestore
 			.collection('posts')
 			.doc(postId)
 			.update({
-				like: 2,
-			})
-			.then(() => resolve('Document updated successfully'))
-			.catch(error => reject(error));
-	});
-
-export const dislike = async (postId: string) =>
-	new Promise((resolve, reject) => {
-		firestore
-			.collection('posts')
-			.doc(postId)
-			.update({
-				dislike: 2,
+				likes: hasLiked ? currentLikes - 1 : currentLikes + 1,
 			})
 			.then(() => resolve('Document updated successfully'))
 			.catch(error => reject(error));
