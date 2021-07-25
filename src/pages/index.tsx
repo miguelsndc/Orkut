@@ -24,6 +24,7 @@ import { useQuery } from 'react-query';
 import { getCommunities, getFollowers, getPosts } from 'src/api';
 import { Community } from 'src/types/Community';
 import { User } from 'src/types/User';
+import api from 'src/services/api';
 
 type HomeProps = {
 	communities: Community[];
@@ -122,12 +123,19 @@ export const getServerSideProps: GetServerSideProps = async (
 
 	const communities = await getCommunities();
 
-	const followersResponse = await getFollowers(githubUserId);
+	const { data } = await api.get<Follower[]>(
+		`/user/${githubUserId}/followers`,
+		{
+			headers: {
+				Authorization: `token ${process.env.GITHUB_ACESS_TOKEN}`,
+			},
+		}
+	);
 
 	return {
 		props: {
 			communities,
-			followers: followersResponse.data,
+			followers: data,
 			user: {
 				name: token.name,
 				picture: token.picture,
