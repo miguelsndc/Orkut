@@ -78,12 +78,12 @@ export default function FollowerList({ user }: FollowerListProps) {
 															width={184}
 															height={184}
 														/>
-														<div>
+														<td>
 															<Link href={`/users/${follower.id}`}>
 																<h3>{follower.login}</h3>
 															</Link>
 															<span>{follower.html_url}</span>
-														</div>
+														</td>
 													</tr>
 												);
 											})}
