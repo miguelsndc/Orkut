@@ -1,8 +1,8 @@
-import { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
+import { FollowerResponse } from 'src/pages/followers';
 import api from 'src/services/api';
 import { firestore, firebase } from 'src/services/firebase/config';
 import { Community } from 'src/types/Community';
-import { Follower } from 'src/types/Follower';
 import { GithubUser } from 'src/types/GithubUser';
 import { PostType } from 'src/types/Post';
 
@@ -41,8 +41,19 @@ export const createPost = (newPost: PostType): Promise<void> =>
 
 export const getFollowers = async (
 	githubUserId: string,
-	config?: AxiosRequestConfig
-) => await api.get<Follower[]>(`/user/${githubUserId}/followers`, config);
+	config?: AxiosRequestConfig,
+	page: number = 1,
+	results_per_page: number = 20
+) => {
+	const { data } = await axios.post<FollowerResponse>('/api/followers', {
+		uid: githubUserId,
+		config,
+		page,
+		resultsPerPage: results_per_page,
+	});
+
+	return data;
+};
 
 export const getUser = async (
 	id: string | string[],

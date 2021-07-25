@@ -9,26 +9,46 @@ import Link from 'next/link';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { firebaseAdmin } from 'src/services/firebase/adminConfig';
 import Menu from '@components/Menu';
-import { useQuery } from 'react-query';
+import { useInfiniteQuery } from 'react-query';
 import { getFollowers } from 'src/api';
+import useIntersectionObserver from 'src/hooks/useIntersectionObserver';
 import { User } from 'src/types/User';
+import { Fragment, useEffect } from 'react';
+import Spinner from '@components/Spinner';
 
 type FollowerListProps = {
-	followers: Follower[];
 	user: User;
 };
 
-export default function FollowerList({ followers, user }: FollowerListProps) {
-	const { data } = useQuery(
-		'followers',
-		async () => {
-			const { data } = await getFollowers(user.uid);
-			return data;
-		},
-		{
-			initialData: followers,
-		}
-	);
+export type FollowerResponse = {
+	hasMore: boolean;
+	nextPage: number;
+	data: Follower[];
+};
+
+const ObserverOptions = {
+	root: null,
+	rootMargin: '0px',
+	threshold: 0.8,
+};
+
+export default function FollowerList({ user }: FollowerListProps) {
+	const { elementRef, isVisible } = useIntersectionObserver(ObserverOptions);
+
+	const { fetchNextPage, isFetchingNextPage, hasNextPage, data, isLoading } =
+		useInfiniteQuery<FollowerResponse>(
+			'followers',
+			({ pageParam = 1 }) => getFollowers(user.uid, {}, pageParam, 10),
+			{
+				getNextPageParam: lastPage =>
+					lastPage.hasMore ? lastPage.nextPage : undefined,
+				retry: 3,
+			}
+		);
+
+	useEffect(() => {
+		if (isVisible && hasNextPage) fetchNextPage();
+	}, [isVisible]);
 
 	return (
 		<>
@@ -46,24 +66,37 @@ export default function FollowerList({ followers, user }: FollowerListProps) {
 					</div>
 					<S.Table>
 						<tbody>
-							{data.length > 0 &&
-								data.map(follower => {
+							{!isLoading ? (
+								data.pages.map((page, index) => {
 									return (
-										<tr key={follower.id}>
-											<Image
-												src={follower.avatar_url}
-												width={184}
-												height={184}
-											/>
-											<div>
-												<Link href={`/users/${follower.id}`}>
-													<h3>{follower.login}</h3>
-												</Link>
-												<span>{follower.html_url}</span>
-											</div>
-										</tr>
+										<Fragment key={index}>
+											{page.data.map(follower => {
+												return (
+													<tr key={follower.id}>
+														<Image
+															src={follower.avatar_url}
+															width={184}
+															height={184}
+														/>
+														<div>
+															<Link href={`/users/${follower.id}`}>
+																<h3>{follower.login}</h3>
+															</Link>
+															<span>{follower.html_url}</span>
+														</div>
+													</tr>
+												);
+											})}
+										</Fragment>
 									);
-								})}
+								})
+							) : (
+								<Spinner />
+							)}
+							{isFetchingNextPage && <Spinner />}
+							<div ref={elementRef}>
+								Gambiarra pra pegar o infinite scroll, depois eu arrumo
+							</div>
 						</tbody>
 					</S.Table>
 				</Box>
@@ -91,15 +124,8 @@ export const getServerSideProps: GetServerSideProps = async (
 
 	const githubUserId = token.firebase.identities['github.com'][0];
 
-	const { data } = await getFollowers(githubUserId, {
-		headers: {
-			Authorization: `token ${process.env.GITHUB_ACESS_TOKEN}`,
-		},
-	});
-
 	return {
 		props: {
-			followers: data,
 			user: {
 				name: token.name,
 				picture: token.picture,
