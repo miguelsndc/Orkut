@@ -6,6 +6,7 @@ import { GithubUser } from 'src/types/GithubUser';
 import capitalize from 'src/utils/capitalize';
 import * as S from '@styles/pages/UserDetails';
 import { getUser } from 'src/api';
+import Box from '@components/Box';
 
 type FriendDetailsProps = {
 	user: GithubUser;
@@ -19,15 +20,17 @@ export default function UserDetails({ user }: FriendDetailsProps) {
 			</Head>
 			<Menu />
 			<S.Container>
-				{/* <Image
-					src={user.avatar_url}
-					width={192}
-					height={192}
-					blurDataURL={user.avatar_url}
-					placeholder='blur'
-				/> */}
-				<p>{user.login}</p>
-				<h1>EM CONSTRUÇÃO</h1>
+				<Box>
+					<Image
+						src={user.avatar_url}
+						width={360}
+						height={360}
+						blurDataURL={user.avatar_url}
+						placeholder='blur'
+					/>
+					<h2>{user.login}</h2>
+					<p>{user.bio}</p>
+				</Box>
 			</S.Container>
 		</>
 	);
