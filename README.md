@@ -1,84 +1,144 @@
-# Example app with styled-components
 
-This example features how you use a different styling solution than [styled-jsx](https://github.com/vercel/styled-jsx) that also supports universal styles. That means we can serve the required styles for the first render within the HTML and then load the rest in the client. In this case we are using [styled-components](https://github.com/styled-components/styled-components).
 
-For this purpose we are extending the `<Document />` and injecting the server side rendered styles into the `<head>`, and also adding the `babel-plugin-styled-components` (which is required for server side rendering). Additionally we set up a global [theme](https://www.styled-components.com/docs/advanced#theming) for styled-components using NextJS custom [`<App>`](https://nextjs.org/docs/advanced-features/custom-app) component.
+<!--
+*** Thanks for checking out the Best-README-Template. If you have a suggestion
+*** that would make this better, please fork the repo and create a pull request
+*** or simply open an issue with the tag "enhancement".
+*** Thanks again! Now go create something AMAZING! :D
+-->
 
-## Preview
 
-Preview the example live on [StackBlitz](http://stackblitz.com/):
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-styled-components)
+<!-- PROJECT SHIELDS -->
+<!--
+*** I'm using markdown "reference style" links for readability.
+*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
+*** See the bottom of this document for the declaration of the reference variables
+*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
+*** https://www.markdownguide.org/basic-syntax/#reference-style-links
+-->
 
-## Deploy your own
-
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-styled-components&project-name=with-styled-components&repository-name=with-styled-components)
-
-## How to use
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
-
-```bash
-npx create-next-app --example with-styled-components with-styled-components-app
-# or
-yarn create next-app --example with-styled-components with-styled-components-app
-```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
-
-### Try it on CodeSandbox
-
-[Open this example on CodeSandbox](https://codesandbox.io/s/github/vercel/next.js/tree/canary/examples/with-styled-components)
-
-### Notes
-
-When wrapping a [Link](https://nextjs.org/docs/api-reference/next/link) from `next/link` within a styled-component, the [as](https://styled-components.com/docs/api#as-polymorphic-prop) prop provided by `styled` will collide with the Link's `as` prop and cause styled-components to throw an `Invalid tag` error. To avoid this, you can either use the recommended [forwardedAs](https://styled-components.com/docs/api#forwardedas-prop) prop from styled-components or use a different named prop to pass to a `styled` Link.
-
-<details>
-<summary>Click to expand workaround example</summary>
+<!-- PROJECT LOGO -->
 <br />
+<p align="center">
+  <a href="https://github.com/miguelsndc/Orkut">
+    <img src="https://res.cloudinary.com/db9t2jrhe/image/upload/v1627306024/share_2_vr9ezh.png" alt="Logo" width="200" height="200">
+  </a>
 
-**components/StyledLink.js**
+  <h3 align="center">Alurakut | Orkut</h3>
 
-```javascript
-import Link from 'next/link';
-import styled from 'styled-components';
+  <p align="center">
+   Project developed during the "Imersão React" by @alura
+    <br />
+    <br />
+    <a href="https://github.com/miguelsndc/Orkut">View Demo</a>
+    ·
+    <a href="https://github.com/miguelsndc/Orkut/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/miguelsndc/Orkut/issues">Request Feature</a>
+  </p>
+</p>
 
-const StyledLink = ({ as, children, className, href }) => (
-	<Link href={href} as={as} passHref>
-		<a className={className}>{children}</a>
-	</Link>
-);
 
-export default styled(StyledLink)`
-	color: #0075e0;
-	text-decoration: none;
-	transition: all 0.2s ease-in-out;
 
-	&:hover {
-		color: #40a9ff;
-	}
-
-	&:focus {
-		color: #40a9ff;
-		outline: none;
-		border: 0;
-	}
-`;
-```
-
-**pages/index.js**
-
-```javascript
-import StyledLink from '../components/StyledLink';
-
-export default () => (
-	<StyledLink href='/post/[pid]' forwardedAs='/post/abc'>
-		First post
-	</StyledLink>
-);
-```
-
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
 </details>
+
+
+
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+<p align="center">
+    <a href="https://orkut-blond.vercel.app">View Live</a>
+ </p>
+
+This project is built upon the goold old Orkut, a legendary social media, that unfortunately, got shut down a few years ago. this
+project brings back some of those memories, with a totally redesigned interface.
+
+### Built With
+
+This project is built with the following technologies:
+* [React JS](https://reactjs.org/)
+* [TypeScript](https://www.typescriptlang.org/)
+* [Next JS](https://nextjs.org/)
+* [React Query](https://react-query.tanstack.com/)
+* [Firebase](https://firebase.google.com/?hl=pt-br)
+
+<!-- GETTING STARTED -->
+## Getting Started
+
+To get a local copy of this project up and running follow these simple example steps:
+
+### Prerequisites
+
+This is an example of how to list things you need to use the software and how to install them.
+
+* [Node JS](https://nodejs.org/en/)
+* [Git](https://git-scm.com/)
+* A Package manager, npm (built in node) or [yarn](https://yarnpkg.com/)
+
+### Installation
+
+1. Create a project in [Firebase](https://firebase.google.com/?hl=pt-br) in test mode.
+2. Add a Web APP to your firebase project
+4. Clone the repo
+   ```sh
+   git clone https://github.com/miguelsndc/Orkut
+   ```
+5. Create a .env.local file and populate it with the firebase configs of your web app.
+6. Install NPM packages
+   ```sh
+   npm install // yarn 
+   ```
+7. Start the project
+   ```sh
+   npm start // yarn start
+   ```
+
+<!-- CONTRIBUTING -->
+## Contributing
+
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+
+<!-- LICENSE -->
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+
+
+<!-- CONTACT -->
+## Contact
+
+Miguel Nogueira - [Linkedin](https://www.linkedin.com/in/miguel-nogueira-a5a28a1b5/) - mglsndc@gmail.com
+
+Project Link: [firebase-auth-murex.vercel.app](firebase-auth-murex.vercel.app)
+
