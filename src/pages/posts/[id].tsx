@@ -14,7 +14,10 @@ export default function PostDetails(post: PostDetailsProps) {
 				<title>Alurakut | {post.content.substr(0, 30)}</title>
 			</Head>
 			<Menu />
-			<Post post={post} />
+			{/* <Post post={post} /> */}
+			<div>
+				<h1>To fazendo ainda cara calma</h1>
+			</div>
 		</>
 	);
 }
