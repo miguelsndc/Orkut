@@ -152,7 +152,7 @@ export const Wrapper = styled.header`
 		}
 
 		.menu-overlay {
-			position: absolute;
+			position: fixed;
 			top: 0;
 			height: 100vh;
 			right: 0;
