@@ -79,7 +79,7 @@ export default function FollowerList({ user }: FollowerListProps) {
 															height={184}
 														/>
 														<td>
-															<Link href={`/users/${follower.id}`}>
+															<Link href={`/users/${follower.login}`}>
 																<h3>{follower.login}</h3>
 															</Link>
 															<span>{follower.html_url}</span>
