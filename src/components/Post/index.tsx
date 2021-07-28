@@ -74,7 +74,7 @@ export default function Post({ post }: PostProps) {
 							<span>{likes}</span>
 						</button>
 					</div>
-					<Link href={`/posts/${post.id}`}>Ver mais</Link>
+					<div></div>
 				</div>
 			</Box>
 		</Container>
